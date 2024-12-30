@@ -1,0 +1,62 @@
+#!/bin/bash
+set -e
+trap 'log_error "An error occurred. Exiting script."; exit 1' ERR
+
+# Utility functions
+log() {
+  echo "$(date +"%Y-%m-%d %H:%M:%S") - $1"
+}
+
+log_error() {
+  >&2 log "$1"
+}
+
+get_last_commit_message() {
+  git log -1 --pretty=%B
+}
+
+is_version_bump_commit() {
+  local last_commit_message=$(get_last_commit_message)
+  [[ "$last_commit_message" == "chore: patch version" ]]
+}
+
+has_uncommitted_changes() {
+  [[ -n "$(git status --porcelain)" ]]
+}
+
+# Version patch function
+version_patch() {
+  if is_version_bump_commit; then
+    log "Latest commit is a version bump. Skipping version_patch."
+    return
+  fi
+
+  if has_uncommitted_changes; then
+    log "Uncommitted changes detected. Skipping version bump."
+    return
+  fi
+
+  log "Bumping version..."
+  pnpm run ci:version-patch
+
+  # Get the updated version from package.json
+  local version=$(node -p "require('./package.json').version")
+
+  log "Staging version bump changes..."
+  git add package.json
+
+  log "Committing version bump..."
+  git commit -m "chore: patch version"
+
+  log "Creating tag for version $version..."
+  git tag -a "v$version" -m "Release version $version"
+
+  log "Pushing changes and tag to remote..."
+  git push
+  git push origin "v$version"
+
+  log "Version patch process completed."
+}
+
+# Main execution
+version_patch

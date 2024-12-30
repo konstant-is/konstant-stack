@@ -1,0 +1,28 @@
+.grid {
+  position: relative;
+  display: grid;
+
+  grid-template-columns: repeat(var(--grid-cols), 1fr);
+  grid-row-gap: var(--grid-row-gap, var(--grid-gutter));
+  grid-column-gap: var(--grid-col-gap, var(--grid-gutter));
+}
+
+@mixin generate-cols($max) {
+  @for $i from 1 through $max {
+    .cols-#{$i} {
+      grid-column-end: span #{$i};
+    }
+  }
+}
+
+@mixin generate-col-start($max) {
+  @for $i from 1 through $max {
+    .col-start-#{$i} {
+      grid-column-start: #{$i};
+    }
+  }
+}
+
+// Generate col-start classes for columns 1 to 16
+@include generate-cols(16);
+@include generate-col-start(16);
