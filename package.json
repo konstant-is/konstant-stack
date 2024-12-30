@@ -21,7 +21,8 @@
     "./payload/utils": "./dist/payload/utils/index.js",
     "./utils/date": "./dist/utils/date.js",
     "./utils/string": "./dist/utils/string.js",
-    "./utils/object": "./dist/utils/object.js"
+    "./utils/object": "./dist/utils/object.js",
+    "./theme.scss": "./theme.scss"
   },
   "dependencies": {
     "@payloadcms/ui": "^3.12.0",
