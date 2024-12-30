@@ -1,6 +1,6 @@
 {
   "name": "konstant-stack",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "build:styles": "sass theme.scss dist/theme.css --no-source-map",
