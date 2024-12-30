@@ -3,9 +3,25 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
+    "build": "pnpm clean && tsup && pnpm build:styles",
+    "clean": "rm -rf dist",
     "build:styles": "sass theme.scss dist/theme.css --no-source-map",
     "ci:version-patch": "node scripts/ci-version.js patch",
     "prepare": "husky"
+  },
+  "files": [
+    "dist",
+    "src/styles",
+    "theme.scss"
+  ],
+  "exports": {
+    "./payload/fields": "./dist/payload/fields/index.js",
+    "./payload/custom": "./dist/payload/custom/index.js",
+    "./payload/components": "./dist/payload/components.js",
+    "./payload/utils": "./dist/payload/utils/index.js",
+    "./utils/date": "./dist/utils/date.js",
+    "./utils/string": "./dist/utils/string.js",
+    "./utils/object": "./dist/utils/object.js"
   },
   "dependencies": {
     "@payloadcms/ui": "^3.12.0",
@@ -29,6 +45,7 @@
     "prettier": "^3.4.2",
     "sass": "^1.83.0",
     "semver": "^7.6.3",
+    "tsup": "^8.3.5",
     "typescript": "latest"
   }
 }
