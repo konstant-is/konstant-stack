@@ -22,4 +22,9 @@ export default defineConfig((options) => ({
       type: "css",
     }),
   ],
+  esbuildOptions: (options) => {
+    options.alias = {
+      "@": "./src", // Map '@' to the 'src' directory
+    };
+  },
 }));
