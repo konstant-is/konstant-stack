@@ -1,6 +1,6 @@
 import {
   arrayRowLabelField
-} from "../chunk-USSFXGLK.js";
+} from "../chunk-GII5FM2X.js";
 import {
   deepMerge
 } from "../chunk-Y4FC33LH.js";
@@ -294,7 +294,7 @@ var slugField = (fieldToUse = "title", overrides = {}) => {
       ...slugOverrides?.admin || {},
       components: {
         Field: {
-          path: "@/payload/components#SlugComponent",
+          path: "@konstant/stack/payload/components#SlugComponent",
           clientProps: {
             fieldToUse,
             checkboxFieldPath: checkBoxField.name
@@ -307,10 +307,6 @@ var slugField = (fieldToUse = "title", overrides = {}) => {
 };
 
 // src/payload/custom/uriField/index.ts
-import path from "path";
-import { fileURLToPath } from "url";
-var __filename = fileURLToPath(import.meta.url);
-var __dirname = path.dirname(__filename);
 var beforeValidateHook = async ({
   data,
   // incoming data to update or create with
@@ -323,8 +319,6 @@ var beforeValidateHook = async ({
   return breadcrumbs[0]?.url || "";
 };
 var uriField = () => {
-  const resolvedPath = path.join(__dirname, "payload", "components");
-  console.log(resolvedPath);
   return textField({
     name: "uri",
     index: false,
@@ -340,7 +334,7 @@ var uriField = () => {
       position: "sidebar",
       components: {
         Field: {
-          path: `${resolvedPath}#UriComponent`
+          path: "@konstant/stack/payload/components#UriComponent"
         }
       }
     }

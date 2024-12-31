@@ -77,7 +77,7 @@ module.exports = __toCommonJS(payload_exports);
 // src/payload/custom/rowLabel/index.ts
 var arrayRowLabelField = (props) => {
   return {
-    path: "@/payload/components#ArrayRowLabel",
+    path: "@konstant/stack/payload/components#ArrayRowLabel",
     clientProps: props
   };
 };
@@ -380,7 +380,7 @@ var slugField = (fieldToUse = "title", overrides = {}) => {
       ...slugOverrides?.admin || {},
       components: {
         Field: {
-          path: "@/payload/components#SlugComponent",
+          path: "@konstant/stack/payload/components#SlugComponent",
           clientProps: {
             fieldToUse,
             checkboxFieldPath: checkBoxField.name
@@ -393,11 +393,6 @@ var slugField = (fieldToUse = "title", overrides = {}) => {
 };
 
 // src/payload/custom/uriField/index.ts
-var import_path = __toESM(require("path"), 1);
-var import_url = require("url");
-var import_meta = {};
-var __filename = (0, import_url.fileURLToPath)(import_meta.url);
-var __dirname = import_path.default.dirname(__filename);
 var beforeValidateHook = async ({
   data,
   // incoming data to update or create with
@@ -410,8 +405,6 @@ var beforeValidateHook = async ({
   return breadcrumbs[0]?.url || "";
 };
 var uriField = () => {
-  const resolvedPath = import_path.default.join(__dirname, "payload", "components");
-  console.log(resolvedPath);
   return textField({
     name: "uri",
     index: false,
@@ -427,7 +420,7 @@ var uriField = () => {
       position: "sidebar",
       components: {
         Field: {
-          path: `${resolvedPath}#UriComponent`
+          path: "@konstant/stack/payload/components#UriComponent"
         }
       }
     }

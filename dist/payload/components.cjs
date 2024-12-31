@@ -129,7 +129,7 @@ var UriComponent = ({ path, field }) => {
 // src/payload/custom/rowLabel/index.ts
 var arrayRowLabelField = (props) => {
   return {
-    path: "@/payload/components#ArrayRowLabel",
+    path: "@konstant/stack/payload/components#ArrayRowLabel",
     clientProps: props
   };
 };
