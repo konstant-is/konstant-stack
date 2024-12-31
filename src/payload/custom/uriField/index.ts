@@ -27,7 +27,7 @@ export const uriField = () => {
       position: "sidebar",
       components: {
         Field: {
-          path: `@konstant/payload/components#UriComponent`,
+          path: "@konstant/stack/payload/components#UriComponent",
         },
       },
     },

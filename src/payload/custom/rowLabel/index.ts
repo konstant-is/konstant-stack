@@ -3,7 +3,7 @@ export const arrayRowLabelField = (props: {
   fieldName: string;
 }) => {
   return {
-    path: `@konstant/payload/components#ArrayRowLabel`,
+    path: "@konstant/stack/payload/components#ArrayRowLabel",
     clientProps: props,
   };
 };
