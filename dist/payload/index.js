@@ -307,6 +307,7 @@ var slugField = (fieldToUse = "title", overrides = {}) => {
 };
 
 // src/payload/custom/uriField/index.ts
+import path from "path";
 var beforeValidateHook = async ({
   data,
   // incoming data to update or create with
@@ -319,6 +320,8 @@ var beforeValidateHook = async ({
   return breadcrumbs[0]?.url || "";
 };
 var uriField = () => {
+  const resolvedPath = path.join(__dirname, "payload", "components");
+  console.log(resolvedPath);
   return textField({
     name: "uri",
     index: false,
@@ -334,7 +337,7 @@ var uriField = () => {
       position: "sidebar",
       components: {
         Field: {
-          path: "@/payload/components#UriComponent"
+          path: `${resolvedPath}#UriComponent`
         }
       }
     }
