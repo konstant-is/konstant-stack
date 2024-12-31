@@ -31,7 +31,9 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // src/payload/components.ts
 var components_exports = {};
 __export(components_exports, {
-  SlugComponent: () => SlugComponent
+  SlugComponent: () => SlugComponent,
+  UriComponent: () => UriComponent,
+  arrayRowLabelField: () => arrayRowLabelField
 });
 module.exports = __toCommonJS(components_exports);
 
@@ -103,8 +105,38 @@ var SlugComponent = ({
     )
   ] });
 };
+
+// src/payload/custom/uriField/component.tsx
+var import_ui2 = require("@payloadcms/ui");
+var import_jsx_runtime2 = require("react/jsx-runtime");
+var UriComponent = ({ path, field }) => {
+  const { value, setValue } = (0, import_ui2.useField)({ path: path || field.name });
+  const { label } = field;
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "field-type uri-field-component", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "label-wrapper", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_ui2.FieldLabel, { htmlFor: `field-${path}`, label }) }),
+    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+      import_ui2.TextInput,
+      {
+        value,
+        onChange: setValue,
+        path: path || field.name,
+        readOnly: true
+      }
+    )
+  ] });
+};
+
+// src/payload/custom/rowLabel/index.ts
+var arrayRowLabelField = (props) => {
+  return {
+    path: "@/payload/components#ArrayRowLabel",
+    clientProps: props
+  };
+};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  SlugComponent
+  SlugComponent,
+  UriComponent,
+  arrayRowLabelField
 });
 //# sourceMappingURL=components.cjs.map

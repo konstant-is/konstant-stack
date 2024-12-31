@@ -1,5 +1,8 @@
 "use client";
 import {
+  arrayRowLabelField
+} from "../chunk-USSFXGLK.js";
+import {
   formatSlug
 } from "../chunk-3I3J54W3.js";
 
@@ -69,7 +72,29 @@ var SlugComponent = ({
     )
   ] });
 };
+
+// src/payload/custom/uriField/component.tsx
+import { FieldLabel as FieldLabel2, TextInput as TextInput2, useField as useField2 } from "@payloadcms/ui";
+import { jsx as jsx2, jsxs as jsxs2 } from "react/jsx-runtime";
+var UriComponent = ({ path, field }) => {
+  const { value, setValue } = useField2({ path: path || field.name });
+  const { label } = field;
+  return /* @__PURE__ */ jsxs2("div", { className: "field-type uri-field-component", children: [
+    /* @__PURE__ */ jsx2("div", { className: "label-wrapper", children: /* @__PURE__ */ jsx2(FieldLabel2, { htmlFor: `field-${path}`, label }) }),
+    /* @__PURE__ */ jsx2(
+      TextInput2,
+      {
+        value,
+        onChange: setValue,
+        path: path || field.name,
+        readOnly: true
+      }
+    )
+  ] });
+};
 export {
-  SlugComponent
+  SlugComponent,
+  UriComponent,
+  arrayRowLabelField
 };
 //# sourceMappingURL=components.js.map

@@ -32,6 +32,7 @@ var payload_exports = {};
 __export(payload_exports, {
   addressField: () => addressField,
   arrayField: () => arrayField,
+  arrayRowLabelField: () => arrayRowLabelField,
   blockBuilder: () => blockBuilder,
   blockBuilderHelper: () => blockBuilderHelper,
   blocksField: () => blocksField,
@@ -67,10 +68,19 @@ __export(payload_exports, {
   timeField: () => timeField,
   uiField: () => uiField,
   uploadField: () => uploadField,
+  uriField: () => uriField,
   urlField: () => urlField,
   weekdaysMap: () => weekdaysMap
 });
 module.exports = __toCommonJS(payload_exports);
+
+// src/payload/custom/rowLabel/index.ts
+var arrayRowLabelField = (props) => {
+  return {
+    path: "@/payload/components#ArrayRowLabel",
+    clientProps: props
+  };
+};
 
 // src/payload/fields/fieldConfig.ts
 var fieldConfigInstance = {
@@ -315,6 +325,105 @@ var uiField = (props) => {
   return createField({
     type: "ui",
     ...props
+  });
+};
+
+// src/utils/string.ts
+var import_slugify = __toESM(require("slugify"), 1);
+var capitalize = (str = "") => {
+  if (!str.length) {
+    return "";
+  }
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+var formatSlug = (value = "") => (0, import_slugify.default)(value, {
+  lower: true,
+  trim: true
+});
+
+// src/payload/custom/slugField/index.ts
+var formatSlugHook = (fallback) => ({ data, operation, originalDoc, value }) => {
+  if (typeof value === "string") {
+    return formatSlug(value);
+  }
+  if (operation === "create" || !data?.slug) {
+    const fallbackData = data?.[fallback] || data?.[fallback];
+    if (fallbackData && typeof fallbackData === "string") {
+      return formatSlug(fallbackData);
+    }
+  }
+  return value;
+};
+var slugField = (fieldToUse = "title", overrides = {}) => {
+  const { slugOverrides, checkboxOverrides } = overrides;
+  const checkBoxField = {
+    name: "slugLock",
+    type: "checkbox",
+    defaultValue: true,
+    admin: {
+      hidden: true,
+      position: "sidebar"
+    },
+    ...checkboxOverrides
+  };
+  const field2 = textField({
+    name: "slug",
+    label: "Slug",
+    index: true,
+    ...slugOverrides || {},
+    hooks: {
+      // Kept this in for hook or API based updates
+      beforeValidate: [formatSlugHook(fieldToUse)]
+    },
+    admin: {
+      position: "sidebar",
+      ...slugOverrides?.admin || {},
+      components: {
+        Field: {
+          path: "@/payload/components#SlugComponent",
+          clientProps: {
+            fieldToUse,
+            checkboxFieldPath: checkBoxField.name
+          }
+        }
+      }
+    }
+  });
+  return [field2, checkBoxField];
+};
+
+// src/payload/custom/uriField/index.ts
+var beforeValidateHook = async ({
+  data,
+  // incoming data to update or create with
+  req,
+  // full express request
+  originalDoc
+  // original document
+}) => {
+  const breadcrumbs = (data?.breadcrumbs || []).reverse();
+  return breadcrumbs[0]?.url || "";
+};
+var uriField = () => {
+  return textField({
+    name: "uri",
+    index: false,
+    required: false,
+    hidden: false,
+    localized: true,
+    hooks: {
+      beforeValidate: [beforeValidateHook]
+    },
+    unique: false,
+    admin: {
+      readOnly: false,
+      position: "sidebar",
+      components: {
+        Field: {
+          path: "@/payload/components#UriComponent"
+        }
+      }
+    }
   });
 };
 
@@ -617,71 +726,6 @@ var internalLinkField = createField2((props) => {
   return field2;
 });
 
-// src/utils/string.ts
-var import_slugify = __toESM(require("slugify"), 1);
-var capitalize = (str = "") => {
-  if (!str.length) {
-    return "";
-  }
-  return str.charAt(0).toUpperCase() + str.slice(1);
-};
-var formatSlug = (value = "") => (0, import_slugify.default)(value, {
-  lower: true,
-  trim: true
-});
-
-// src/payload/custom/slugField/index.ts
-var formatSlugHook = (fallback) => ({ data, operation, originalDoc, value }) => {
-  if (typeof value === "string") {
-    return formatSlug(value);
-  }
-  if (operation === "create" || !data?.slug) {
-    const fallbackData = data?.[fallback] || data?.[fallback];
-    if (fallbackData && typeof fallbackData === "string") {
-      return formatSlug(fallbackData);
-    }
-  }
-  return value;
-};
-var slugField = (fieldToUse = "title", overrides = {}) => {
-  const { slugOverrides, checkboxOverrides } = overrides;
-  const checkBoxField = {
-    name: "slugLock",
-    type: "checkbox",
-    defaultValue: true,
-    admin: {
-      hidden: true,
-      position: "sidebar"
-    },
-    ...checkboxOverrides
-  };
-  const field2 = textField({
-    name: "slug",
-    label: "Slug",
-    index: true,
-    ...slugOverrides || {},
-    hooks: {
-      // Kept this in for hook or API based updates
-      beforeValidate: [formatSlugHook(fieldToUse)]
-    },
-    admin: {
-      position: "sidebar",
-      ...slugOverrides?.admin || {},
-      components: {
-        Field: {
-          path: "@konstant/payload/components#SlugComponent",
-          //
-          clientProps: {
-            fieldToUse,
-            checkboxFieldPath: checkBoxField.name
-          }
-        }
-      }
-    }
-  });
-  return [field2, checkBoxField];
-};
-
 // src/payload/custom/timeField.ts
 var timeField = createField2((props) => {
   return dateField({
@@ -697,29 +741,6 @@ var timeField = createField2((props) => {
         pickerAppearance: "timeOnly",
         timeFormat: "HH:mm",
         displayFormat: "HH:mm"
-      }
-    }
-  });
-});
-
-// src/payload/custom/urlField.ts
-var urlField = createField2((props) => {
-  const required = props?.required ?? true;
-  return textField({
-    name: props?.name ?? "url",
-    label: props?.label ?? "Url",
-    hasMany: false,
-    required,
-    admin: {
-      condition: props?.condition
-    },
-    validate: (val) => {
-      if (!required && !val) return true;
-      try {
-        new URL(val);
-        return true;
-      } catch (err) {
-        return "Invalid URL";
       }
     }
   });
@@ -826,6 +847,29 @@ var timeFields = () => {
   ];
 };
 
+// src/payload/custom/urlField.ts
+var urlField = createField2((props) => {
+  const required = props?.required ?? true;
+  return textField({
+    name: props?.name ?? "url",
+    label: props?.label ?? "Url",
+    hasMany: false,
+    required,
+    admin: {
+      condition: props?.condition
+    },
+    validate: (val) => {
+      if (!required && !val) return true;
+      try {
+        new URL(val);
+        return true;
+      } catch (err) {
+        return "Invalid URL";
+      }
+    }
+  });
+});
+
 // src/payload/custom/socialMediaField.ts
 var socialsOptions = {
   facebook: {
@@ -879,6 +923,7 @@ var socialsField = createField2((props) => {
 0 && (module.exports = {
   addressField,
   arrayField,
+  arrayRowLabelField,
   blockBuilder,
   blockBuilderHelper,
   blocksField,
@@ -914,6 +959,7 @@ var socialsField = createField2((props) => {
   timeField,
   uiField,
   uploadField,
+  uriField,
   urlField,
   weekdaysMap
 });

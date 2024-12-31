@@ -1,5 +1,7 @@
 import React from 'react';
 import { TextFieldClientProps } from 'payload';
+import * as react_jsx_runtime from 'react/jsx-runtime';
+export { a as arrayRowLabelField } from '../index-B4SXuD7h.cjs';
 
 type SlugComponentProps = {
     fieldToUse: string;
@@ -7,4 +9,7 @@ type SlugComponentProps = {
 } & TextFieldClientProps;
 declare const SlugComponent: React.FC<SlugComponentProps>;
 
-export { SlugComponent };
+type UriFieldProps = {} & TextFieldClientProps;
+declare const UriComponent: ({ path, field }: UriFieldProps) => react_jsx_runtime.JSX.Element;
+
+export { SlugComponent, UriComponent };

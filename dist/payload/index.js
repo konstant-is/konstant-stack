@@ -1,4 +1,7 @@
 import {
+  arrayRowLabelField
+} from "../chunk-USSFXGLK.js";
+import {
   deepMerge
 } from "../chunk-Y4FC33LH.js";
 import {
@@ -249,6 +252,92 @@ var uiField = (props) => {
   return createField({
     type: "ui",
     ...props
+  });
+};
+
+// src/payload/custom/slugField/index.ts
+var formatSlugHook = (fallback) => ({ data, operation, originalDoc, value }) => {
+  if (typeof value === "string") {
+    return formatSlug(value);
+  }
+  if (operation === "create" || !data?.slug) {
+    const fallbackData = data?.[fallback] || data?.[fallback];
+    if (fallbackData && typeof fallbackData === "string") {
+      return formatSlug(fallbackData);
+    }
+  }
+  return value;
+};
+var slugField = (fieldToUse = "title", overrides = {}) => {
+  const { slugOverrides, checkboxOverrides } = overrides;
+  const checkBoxField = {
+    name: "slugLock",
+    type: "checkbox",
+    defaultValue: true,
+    admin: {
+      hidden: true,
+      position: "sidebar"
+    },
+    ...checkboxOverrides
+  };
+  const field2 = textField({
+    name: "slug",
+    label: "Slug",
+    index: true,
+    ...slugOverrides || {},
+    hooks: {
+      // Kept this in for hook or API based updates
+      beforeValidate: [formatSlugHook(fieldToUse)]
+    },
+    admin: {
+      position: "sidebar",
+      ...slugOverrides?.admin || {},
+      components: {
+        Field: {
+          path: "@/payload/components#SlugComponent",
+          clientProps: {
+            fieldToUse,
+            checkboxFieldPath: checkBoxField.name
+          }
+        }
+      }
+    }
+  });
+  return [field2, checkBoxField];
+};
+
+// src/payload/custom/uriField/index.ts
+var beforeValidateHook = async ({
+  data,
+  // incoming data to update or create with
+  req,
+  // full express request
+  originalDoc
+  // original document
+}) => {
+  const breadcrumbs = (data?.breadcrumbs || []).reverse();
+  return breadcrumbs[0]?.url || "";
+};
+var uriField = () => {
+  return textField({
+    name: "uri",
+    index: false,
+    required: false,
+    hidden: false,
+    localized: true,
+    hooks: {
+      beforeValidate: [beforeValidateHook]
+    },
+    unique: false,
+    admin: {
+      readOnly: false,
+      position: "sidebar",
+      components: {
+        Field: {
+          path: "@/payload/components#UriComponent"
+        }
+      }
+    }
   });
 };
 
@@ -529,58 +618,6 @@ var internalLinkField = createField2((props) => {
   return field2;
 });
 
-// src/payload/custom/slugField/index.ts
-var formatSlugHook = (fallback) => ({ data, operation, originalDoc, value }) => {
-  if (typeof value === "string") {
-    return formatSlug(value);
-  }
-  if (operation === "create" || !data?.slug) {
-    const fallbackData = data?.[fallback] || data?.[fallback];
-    if (fallbackData && typeof fallbackData === "string") {
-      return formatSlug(fallbackData);
-    }
-  }
-  return value;
-};
-var slugField = (fieldToUse = "title", overrides = {}) => {
-  const { slugOverrides, checkboxOverrides } = overrides;
-  const checkBoxField = {
-    name: "slugLock",
-    type: "checkbox",
-    defaultValue: true,
-    admin: {
-      hidden: true,
-      position: "sidebar"
-    },
-    ...checkboxOverrides
-  };
-  const field2 = textField({
-    name: "slug",
-    label: "Slug",
-    index: true,
-    ...slugOverrides || {},
-    hooks: {
-      // Kept this in for hook or API based updates
-      beforeValidate: [formatSlugHook(fieldToUse)]
-    },
-    admin: {
-      position: "sidebar",
-      ...slugOverrides?.admin || {},
-      components: {
-        Field: {
-          path: "@konstant/payload/components#SlugComponent",
-          //
-          clientProps: {
-            fieldToUse,
-            checkboxFieldPath: checkBoxField.name
-          }
-        }
-      }
-    }
-  });
-  return [field2, checkBoxField];
-};
-
 // src/payload/custom/timeField.ts
 var timeField = createField2((props) => {
   return dateField({
@@ -596,29 +633,6 @@ var timeField = createField2((props) => {
         pickerAppearance: "timeOnly",
         timeFormat: "HH:mm",
         displayFormat: "HH:mm"
-      }
-    }
-  });
-});
-
-// src/payload/custom/urlField.ts
-var urlField = createField2((props) => {
-  const required = props?.required ?? true;
-  return textField({
-    name: props?.name ?? "url",
-    label: props?.label ?? "Url",
-    hasMany: false,
-    required,
-    admin: {
-      condition: props?.condition
-    },
-    validate: (val) => {
-      if (!required && !val) return true;
-      try {
-        new URL(val);
-        return true;
-      } catch (err) {
-        return "Invalid URL";
       }
     }
   });
@@ -725,6 +739,29 @@ var timeFields = () => {
   ];
 };
 
+// src/payload/custom/urlField.ts
+var urlField = createField2((props) => {
+  const required = props?.required ?? true;
+  return textField({
+    name: props?.name ?? "url",
+    label: props?.label ?? "Url",
+    hasMany: false,
+    required,
+    admin: {
+      condition: props?.condition
+    },
+    validate: (val) => {
+      if (!required && !val) return true;
+      try {
+        new URL(val);
+        return true;
+      } catch (err) {
+        return "Invalid URL";
+      }
+    }
+  });
+});
+
 // src/payload/custom/socialMediaField.ts
 var socialsOptions = {
   facebook: {
@@ -777,6 +814,7 @@ var socialsField = createField2((props) => {
 export {
   addressField,
   arrayField,
+  arrayRowLabelField,
   blockBuilder,
   blockBuilderHelper,
   blocksField,
@@ -812,6 +850,7 @@ export {
   timeField,
   uiField,
   uploadField,
+  uriField,
   urlField,
   weekdaysMap
 };
