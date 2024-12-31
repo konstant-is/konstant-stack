@@ -1,12 +1,5 @@
 import { FieldHook } from "payload";
-import path from "path";
-import { fileURLToPath } from "url";
-
 import { textField } from "@/payload/fields";
-
-// Resolve the current directory
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const beforeValidateHook: FieldHook = async ({
   data, // incoming data to update or create with
@@ -34,7 +27,7 @@ export const uriField = () => {
       position: "sidebar",
       components: {
         Field: {
-          path: `${path.join(__dirname, "payload", "components")}#UriComponent`,
+          path: `@konstant/payload/components#UriComponent`,
         },
       },
     },
