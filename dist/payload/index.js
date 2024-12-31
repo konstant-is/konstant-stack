@@ -1,3 +1,77 @@
+import {
+  deepMerge
+} from "../chunk-Y4FC33LH.js";
+import {
+  formatSlug
+} from "../chunk-3I3J54W3.js";
+
+// src/payload/custom/slugField/component.tsx
+import { useCallback, useEffect } from "react";
+import {
+  Button,
+  FieldLabel,
+  TextInput,
+  useField,
+  useForm,
+  useFormFields
+} from "@payloadcms/ui";
+import { jsx, jsxs } from "react/jsx-runtime";
+var SlugComponent = ({
+  field: field2,
+  fieldToUse,
+  checkboxFieldPath: checkboxFieldPathFromProps,
+  path,
+  readOnly: readOnlyFromProps
+}) => {
+  const { label } = field2;
+  const checkboxFieldPath = path?.includes(".") ? `${path}.${checkboxFieldPathFromProps}` : checkboxFieldPathFromProps;
+  const { value, setValue } = useField({ path: path || field2.name });
+  const { dispatchFields } = useForm();
+  const checkboxValue = useFormFields(([fields]) => {
+    return fields[checkboxFieldPath]?.value;
+  });
+  const targetFieldValue = useFormFields(([fields]) => {
+    return fields[fieldToUse]?.value;
+  });
+  useEffect(() => {
+    if (checkboxValue) {
+      if (targetFieldValue) {
+        const formattedSlug = formatSlug(targetFieldValue);
+        if (value !== formattedSlug) setValue(formattedSlug);
+      } else {
+        if (value !== "") setValue("");
+      }
+    }
+  }, [targetFieldValue, checkboxValue, setValue, value]);
+  const handleLock = useCallback(
+    (e) => {
+      e.preventDefault();
+      dispatchFields({
+        type: "UPDATE",
+        path: checkboxFieldPath,
+        value: !checkboxValue
+      });
+    },
+    [checkboxValue, checkboxFieldPath, dispatchFields]
+  );
+  const readOnly = readOnlyFromProps || checkboxValue;
+  return /* @__PURE__ */ jsxs("div", { className: "field-type slug-field-component", children: [
+    /* @__PURE__ */ jsxs("div", { className: "label-wrapper", children: [
+      /* @__PURE__ */ jsx(FieldLabel, { htmlFor: `field-${path}`, label }),
+      /* @__PURE__ */ jsx(Button, { className: "lock-button", buttonStyle: "none", onClick: handleLock, children: checkboxValue ? "Unlock" : "Lock" })
+    ] }),
+    /* @__PURE__ */ jsx(
+      TextInput,
+      {
+        value,
+        onChange: setValue,
+        path: path || field2.name,
+        readOnly: Boolean(readOnly)
+      }
+    )
+  ] });
+};
+
 // src/payload/fields/fieldConfig.ts
 var fieldConfigInstance = {
   localized: false,
@@ -244,28 +318,116 @@ var uiField = (props) => {
   });
 };
 
+// src/payload/utils/blockBuilder.ts
+var blockBuilder = (config) => {
+  const helper = blockBuilderHelper({
+    config
+  });
+  return helper;
+};
+var blockBuilderHelper = (props) => {
+  const { config } = props;
+  let blockKeys = Object.keys(config).filter((b) => {
+    const blockSettings = config[b];
+    if (typeof blockSettings === "boolean" && blockSettings === false) {
+      return false;
+    }
+    return true;
+  }) || [];
+  const exclude = (...blocks) => {
+    blockKeys = blockKeys.filter((key) => !blocks.includes(key));
+    return builder;
+  };
+  const filter = (predicate) => {
+    blockKeys = blockKeys.filter(predicate);
+  };
+  const only = (...blocks) => {
+    blockKeys = blockKeys.filter((key) => blocks.includes(key));
+    return builder;
+  };
+  const build = (params) => {
+    const blocks = blockKeys.map((key) => {
+      const block = config[key];
+      if (!block) {
+        console.error(`Block ${key} not found in blockMap`);
+        return null;
+      }
+      return block(params);
+    });
+    return blocks.filter((b) => b !== null);
+  };
+  const builder = {
+    filter,
+    exclude,
+    build,
+    only
+  };
+  return builder;
+};
+
+// src/payload/utils/createConfig.ts
+var createCollectionConfig = (config) => {
+  return {
+    access: {
+      read: () => true,
+      ...config.access
+    },
+    ...config
+  };
+};
+var createGlobalConfig = (config) => {
+  return {
+    access: {
+      read: () => true,
+      ...config.access
+    },
+    ...config
+  };
+};
+var createBlock = (block) => {
+  const fallbackInterfaceName = () => block.slug.includes("Block") ? block.slug : `${block.slug}Block`;
+  return {
+    ...block,
+    interfaceName: block?.interfaceName || fallbackInterfaceName()
+  };
+};
+
+// src/payload/utils/createField.ts
+function createField2(fieldFn) {
+  return (props = {}) => {
+    const field2 = fieldFn(props);
+    return deepMerge(field2, props.overrides || {});
+  };
+}
 export {
+  SlugComponent,
+  arrayField,
+  blockBuilder,
+  blockBuilderHelper,
+  blocksField,
+  checkboxField,
+  collapsibleField,
+  createBlock,
+  createCollectionConfig,
+  createField2 as createField,
+  createGlobalConfig,
+  dateField,
+  emailField,
   field,
+  groupField,
+  jsonField,
+  numberField,
+  pointField,
+  radioField,
+  relationshipField,
+  richTextField,
+  rowField,
+  selectField,
+  tabField,
+  tabsField,
   textField,
   textareaField,
-  numberField,
-  richTextField,
-  selectField,
-  tabsField,
-  tabField,
-  blocksField,
-  uploadField,
-  groupField,
-  rowField,
-  radioField,
-  checkboxField,
-  relationshipField,
-  arrayField,
-  dateField,
-  collapsibleField,
-  pointField,
-  emailField,
-  jsonField,
-  uiField
+  uiField,
+  uploadField
 };
-//# sourceMappingURL=chunk-4I4EJ3ZZ.js.map
+//# sourceMappingURL=index.js.map

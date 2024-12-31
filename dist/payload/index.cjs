@@ -1,7 +1,9 @@
 "use strict";
+var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
   for (var name in all)
@@ -15,15 +17,30 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// src/payload/fields/index.ts
-var fields_exports = {};
-__export(fields_exports, {
+// src/payload/index.ts
+var payload_exports = {};
+__export(payload_exports, {
+  SlugComponent: () => SlugComponent,
   arrayField: () => arrayField,
+  blockBuilder: () => blockBuilder,
+  blockBuilderHelper: () => blockBuilderHelper,
   blocksField: () => blocksField,
   checkboxField: () => checkboxField,
   collapsibleField: () => collapsibleField,
+  createBlock: () => createBlock,
+  createCollectionConfig: () => createCollectionConfig,
+  createField: () => createField2,
+  createGlobalConfig: () => createGlobalConfig,
   dateField: () => dateField,
   emailField: () => emailField,
   field: () => field,
@@ -43,7 +60,76 @@ __export(fields_exports, {
   uiField: () => uiField,
   uploadField: () => uploadField
 });
-module.exports = __toCommonJS(fields_exports);
+module.exports = __toCommonJS(payload_exports);
+
+// src/payload/custom/slugField/component.tsx
+var import_react = require("react");
+var import_ui = require("@payloadcms/ui");
+
+// src/utils/string.ts
+var import_slugify = __toESM(require("slugify"), 1);
+var formatSlug = (value = "") => (0, import_slugify.default)(value, {
+  lower: true,
+  trim: true
+});
+
+// src/payload/custom/slugField/component.tsx
+var import_jsx_runtime = require("react/jsx-runtime");
+var SlugComponent = ({
+  field: field2,
+  fieldToUse,
+  checkboxFieldPath: checkboxFieldPathFromProps,
+  path,
+  readOnly: readOnlyFromProps
+}) => {
+  const { label } = field2;
+  const checkboxFieldPath = path?.includes(".") ? `${path}.${checkboxFieldPathFromProps}` : checkboxFieldPathFromProps;
+  const { value, setValue } = (0, import_ui.useField)({ path: path || field2.name });
+  const { dispatchFields } = (0, import_ui.useForm)();
+  const checkboxValue = (0, import_ui.useFormFields)(([fields]) => {
+    return fields[checkboxFieldPath]?.value;
+  });
+  const targetFieldValue = (0, import_ui.useFormFields)(([fields]) => {
+    return fields[fieldToUse]?.value;
+  });
+  (0, import_react.useEffect)(() => {
+    if (checkboxValue) {
+      if (targetFieldValue) {
+        const formattedSlug = formatSlug(targetFieldValue);
+        if (value !== formattedSlug) setValue(formattedSlug);
+      } else {
+        if (value !== "") setValue("");
+      }
+    }
+  }, [targetFieldValue, checkboxValue, setValue, value]);
+  const handleLock = (0, import_react.useCallback)(
+    (e) => {
+      e.preventDefault();
+      dispatchFields({
+        type: "UPDATE",
+        path: checkboxFieldPath,
+        value: !checkboxValue
+      });
+    },
+    [checkboxValue, checkboxFieldPath, dispatchFields]
+  );
+  const readOnly = readOnlyFromProps || checkboxValue;
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "field-type slug-field-component", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "label-wrapper", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_ui.FieldLabel, { htmlFor: `field-${path}`, label }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_ui.Button, { className: "lock-button", buttonStyle: "none", onClick: handleLock, children: checkboxValue ? "Unlock" : "Lock" })
+    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+      import_ui.TextInput,
+      {
+        value,
+        onChange: setValue,
+        path: path || field2.name,
+        readOnly: Boolean(readOnly)
+      }
+    )
+  ] });
+};
 
 // src/payload/fields/fieldConfig.ts
 var fieldConfigInstance = {
@@ -290,12 +376,123 @@ var uiField = (props) => {
     ...props
   });
 };
+
+// src/payload/utils/blockBuilder.ts
+var blockBuilder = (config) => {
+  const helper = blockBuilderHelper({
+    config
+  });
+  return helper;
+};
+var blockBuilderHelper = (props) => {
+  const { config } = props;
+  let blockKeys = Object.keys(config).filter((b) => {
+    const blockSettings = config[b];
+    if (typeof blockSettings === "boolean" && blockSettings === false) {
+      return false;
+    }
+    return true;
+  }) || [];
+  const exclude = (...blocks) => {
+    blockKeys = blockKeys.filter((key) => !blocks.includes(key));
+    return builder;
+  };
+  const filter = (predicate) => {
+    blockKeys = blockKeys.filter(predicate);
+  };
+  const only = (...blocks) => {
+    blockKeys = blockKeys.filter((key) => blocks.includes(key));
+    return builder;
+  };
+  const build = (params) => {
+    const blocks = blockKeys.map((key) => {
+      const block = config[key];
+      if (!block) {
+        console.error(`Block ${key} not found in blockMap`);
+        return null;
+      }
+      return block(params);
+    });
+    return blocks.filter((b) => b !== null);
+  };
+  const builder = {
+    filter,
+    exclude,
+    build,
+    only
+  };
+  return builder;
+};
+
+// src/payload/utils/createConfig.ts
+var createCollectionConfig = (config) => {
+  return {
+    access: {
+      read: () => true,
+      ...config.access
+    },
+    ...config
+  };
+};
+var createGlobalConfig = (config) => {
+  return {
+    access: {
+      read: () => true,
+      ...config.access
+    },
+    ...config
+  };
+};
+var createBlock = (block) => {
+  const fallbackInterfaceName = () => block.slug.includes("Block") ? block.slug : `${block.slug}Block`;
+  return {
+    ...block,
+    interfaceName: block?.interfaceName || fallbackInterfaceName()
+  };
+};
+
+// src/utils/object.ts
+function isObject(item) {
+  return item && typeof item === "object" && !Array.isArray(item);
+}
+function deepMerge(target, source) {
+  const output = { ...target };
+  if (isObject(target) && isObject(source)) {
+    Object.keys(source).forEach((key) => {
+      if (isObject(source[key])) {
+        if (!(key in target)) {
+          Object.assign(output, { [key]: source[key] });
+        } else {
+          output[key] = deepMerge(target[key], source[key]);
+        }
+      } else {
+        Object.assign(output, { [key]: source[key] });
+      }
+    });
+  }
+  return output;
+}
+
+// src/payload/utils/createField.ts
+function createField2(fieldFn) {
+  return (props = {}) => {
+    const field2 = fieldFn(props);
+    return deepMerge(field2, props.overrides || {});
+  };
+}
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+  SlugComponent,
   arrayField,
+  blockBuilder,
+  blockBuilderHelper,
   blocksField,
   checkboxField,
   collapsibleField,
+  createBlock,
+  createCollectionConfig,
+  createField,
+  createGlobalConfig,
   dateField,
   emailField,
   field,
