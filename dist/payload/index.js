@@ -308,6 +308,9 @@ var slugField = (fieldToUse = "title", overrides = {}) => {
 
 // src/payload/custom/uriField/index.ts
 import path from "path";
+import { fileURLToPath } from "url";
+var __filename = fileURLToPath(import.meta.url);
+var __dirname = path.dirname(__filename);
 var beforeValidateHook = async ({
   data,
   // incoming data to update or create with

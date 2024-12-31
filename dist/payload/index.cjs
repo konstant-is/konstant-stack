@@ -394,6 +394,10 @@ var slugField = (fieldToUse = "title", overrides = {}) => {
 
 // src/payload/custom/uriField/index.ts
 var import_path = __toESM(require("path"), 1);
+var import_url = require("url");
+var import_meta = {};
+var __filename = (0, import_url.fileURLToPath)(import_meta.url);
+var __dirname = import_path.default.dirname(__filename);
 var beforeValidateHook = async ({
   data,
   // incoming data to update or create with

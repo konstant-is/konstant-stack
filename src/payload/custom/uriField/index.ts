@@ -1,6 +1,12 @@
-import { textField } from "@/payload/fields";
-import path from "path";
 import { FieldHook } from "payload";
+import path from "path";
+import { fileURLToPath } from "url";
+
+import { textField } from "@/payload/fields";
+
+// Resolve the current directory
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const beforeValidateHook: FieldHook = async ({
   data, // incoming data to update or create with
