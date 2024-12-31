@@ -1,11 +1,128 @@
-import React from 'react';
-import { TextFieldClientProps, Field, TextField, TextareaField, NumberField, RichTextField, SelectField, TabsField, Tab, BlocksField, UploadField, GroupField, RowField, RadioField, CheckboxField, RelationshipField, ArrayField, DateField, CollapsibleField, PointField, EmailField, JSONField, UIField, Block, CollectionConfig, GlobalConfig } from 'payload';
+import * as payload from 'payload';
+import { Field, FieldHook, TextField, CheckboxField, Block, CollectionConfig, GlobalConfig, TextareaField, NumberField, RichTextField, SelectField, TabsField, Tab, BlocksField, UploadField, GroupField, RowField, RadioField, RelationshipField, ArrayField, DateField, CollapsibleField, PointField, EmailField, JSONField, UIField } from 'payload';
 
-type SlugComponentProps = {
-    fieldToUse: string;
-    checkboxFieldPath: string;
-} & TextFieldClientProps;
-declare const SlugComponent: React.FC<SlugComponentProps>;
+type CreateFieldProps<P = unknown> = P & {
+    overrides?: Record<string, unknown>;
+    fields?: Field[];
+    required?: boolean;
+    label?: string;
+    name?: string;
+    condition?: (data: any, siblingData: any) => boolean;
+    hideGutter?: boolean;
+    hidden?: boolean;
+    description?: string;
+    localized?: boolean;
+};
+type FieldCreationFunction<P = unknown> = (props: CreateFieldProps<P>) => Field;
+declare function createField<P>(fieldFn: FieldCreationFunction<P>): (props?: CreateFieldProps<P>) => Field;
+
+declare const fields: {
+    addressLine1: string;
+    addressLine2: string;
+    state: string;
+    city: string;
+    postalCode: string;
+    location: string;
+};
+type FieldKeys = keyof typeof fields;
+declare const addressField: (props?: CreateFieldProps<{
+    hideFields?: FieldKeys[];
+}>) => payload.Field;
+
+type LinkAppearance = "default" | "button" | "cta" | "link" | "custom";
+declare const linkField: (props?: CreateFieldProps<{
+    relationTo: string | string[];
+    appearance?: LinkAppearance;
+}>) => Field;
+declare const externalLinkField: (props?: {
+    overrides?: Record<string, unknown>;
+    fields?: Field[];
+    required?: boolean;
+    label?: string;
+    name?: string;
+    condition?: (data: any, siblingData: any) => boolean;
+    hideGutter?: boolean;
+    hidden?: boolean;
+    description?: string;
+    localized?: boolean;
+}) => Field;
+declare const internalLinkField: (props?: CreateFieldProps<{
+    relationTo: string | string[];
+}>) => Field;
+
+declare const formatSlugHook: (fallback: string) => FieldHook;
+type Overrides = {
+    slugOverrides?: Partial<TextField>;
+    checkboxOverrides?: Partial<CheckboxField>;
+};
+type Slug = (fieldToUse?: string, overrides?: Overrides) => [Field, Field];
+declare const slugField: Slug;
+
+declare const timeField: (props?: {
+    overrides?: Record<string, unknown>;
+    fields?: payload.Field[];
+    required?: boolean;
+    label?: string;
+    name?: string;
+    condition?: (data: any, siblingData: any) => boolean;
+    hideGutter?: boolean;
+    hidden?: boolean;
+    description?: string;
+    localized?: boolean;
+}) => payload.Field;
+
+declare const urlField: (props?: {
+    overrides?: Record<string, unknown>;
+    fields?: payload.Field[];
+    required?: boolean;
+    label?: string;
+    name?: string;
+    condition?: (data: any, siblingData: any) => boolean;
+    hideGutter?: boolean;
+    hidden?: boolean;
+    description?: string;
+    localized?: boolean;
+}) => payload.Field;
+
+declare const weekdaysMap: Record<string, string>;
+declare const openingHoursField: (props?: {
+    overrides?: Record<string, unknown>;
+    fields?: payload.Field[];
+    required?: boolean;
+    label?: string;
+    name?: string;
+    condition?: (data: any, siblingData: any) => boolean;
+    hideGutter?: boolean;
+    hidden?: boolean;
+    description?: string;
+    localized?: boolean;
+}) => payload.Field;
+
+type BlockConfig = Record<string, (props: unknown) => Block>;
+type BlockKey = keyof BlockConfig;
+declare const blockBuilder: (config: BlockConfig) => {
+    filter: (predicate: (value: string, index: number) => boolean) => void;
+    exclude: (...blocks: BlockKey[]) => /*elided*/ any;
+    build: (params?: unknown) => Block[];
+    only: (...blocks: BlockKey[]) => /*elided*/ any;
+};
+declare const blockBuilderHelper: (props: {
+    config: BlockConfig;
+}) => {
+    filter: (predicate: (value: string, index: number) => boolean) => void;
+    exclude: (...blocks: BlockKey[]) => /*elided*/ any;
+    build: (params?: unknown) => Block[];
+    only: (...blocks: BlockKey[]) => /*elided*/ any;
+};
+
+declare const createCollectionConfig: (config: CollectionConfig) => CollectionConfig;
+declare const createGlobalConfig: (config: GlobalConfig) => GlobalConfig;
+declare const createBlock: (block: Block) => Block;
+
+type SocialsTypes = "facebook" | "instagram" | "twitter" | "linkedin" | "strava";
+declare const socialsField: (props?: CreateFieldProps<{
+    showOnly: SocialsTypes[];
+}>) => payload.Field;
 
 declare const field: (props: Field) => Field;
 declare const textField: (props: Omit<TextField, "type">) => Field;
@@ -30,40 +147,4 @@ declare const emailField: (props: Omit<EmailField, "type">) => Field;
 declare const jsonField: (props: Omit<JSONField, "type">) => Field;
 declare const uiField: (props: Omit<UIField, "type">) => Field;
 
-type BlockConfig = Record<string, (props: unknown) => Block>;
-type BlockKey = keyof BlockConfig;
-declare const blockBuilder: (config: BlockConfig) => {
-    filter: (predicate: (value: string, index: number) => boolean) => void;
-    exclude: (...blocks: BlockKey[]) => /*elided*/ any;
-    build: (params?: unknown) => Block[];
-    only: (...blocks: BlockKey[]) => /*elided*/ any;
-};
-declare const blockBuilderHelper: (props: {
-    config: BlockConfig;
-}) => {
-    filter: (predicate: (value: string, index: number) => boolean) => void;
-    exclude: (...blocks: BlockKey[]) => /*elided*/ any;
-    build: (params?: unknown) => Block[];
-    only: (...blocks: BlockKey[]) => /*elided*/ any;
-};
-
-declare const createCollectionConfig: (config: CollectionConfig) => CollectionConfig;
-declare const createGlobalConfig: (config: GlobalConfig) => GlobalConfig;
-declare const createBlock: (block: Block) => Block;
-
-type CreateFieldProps<P = unknown> = P & {
-    overrides?: Record<string, unknown>;
-    fields?: Field[];
-    required?: boolean;
-    label?: string;
-    name?: string;
-    condition?: (data: any, siblingData: any) => boolean;
-    hideGutter?: boolean;
-    hidden?: boolean;
-    description?: string;
-    localized?: boolean;
-};
-type FieldCreationFunction<P = unknown> = (props: CreateFieldProps<P>) => Field;
-declare function createField<P>(fieldFn: FieldCreationFunction<P>): (props?: CreateFieldProps<P>) => Field;
-
-export { type CreateFieldProps, SlugComponent, arrayField, blockBuilder, blockBuilderHelper, blocksField, checkboxField, collapsibleField, createBlock, createCollectionConfig, createField, createGlobalConfig, dateField, emailField, field, groupField, jsonField, numberField, pointField, radioField, relationshipField, richTextField, rowField, selectField, tabField, tabsField, textField, textareaField, uiField, uploadField };
+export { type CreateFieldProps, addressField, arrayField, blockBuilder, blockBuilderHelper, blocksField, checkboxField, collapsibleField, createBlock, createCollectionConfig, createField, createGlobalConfig, dateField, emailField, externalLinkField, field, formatSlugHook, groupField, internalLinkField, jsonField, linkField, numberField, openingHoursField, pointField, radioField, relationshipField, richTextField, rowField, selectField, slugField, socialsField, tabField, tabsField, textField, textareaField, timeField, uiField, uploadField, urlField, weekdaysMap };

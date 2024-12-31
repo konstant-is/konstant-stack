@@ -7,6 +7,7 @@ export default defineConfig((options) => ({
     "src/utils/object.ts",
     "src/utils/string.ts",
     "src/payload/index.ts",
+    "src/payload/components.ts",
   ], // Main entry point
   outDir: "dist", // Output directory
   format: ["cjs", "esm"], // Build CommonJS and ESM formats

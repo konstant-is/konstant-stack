@@ -16,6 +16,7 @@
   ],
   "exports": {
     "./payload": "./dist/payload/index.js",
+    "./payload/components": "./dist/payload/components.js",
     "./utils/date": "./dist/utils/date.js",
     "./utils/string": "./dist/utils/string.js",
     "./utils/object": "./dist/utils/object.js",

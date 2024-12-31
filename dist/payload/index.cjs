@@ -30,7 +30,7 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // src/payload/index.ts
 var payload_exports = {};
 __export(payload_exports, {
-  SlugComponent: () => SlugComponent,
+  addressField: () => addressField,
   arrayField: () => arrayField,
   blockBuilder: () => blockBuilder,
   blockBuilderHelper: () => blockBuilderHelper,
@@ -43,93 +43,34 @@ __export(payload_exports, {
   createGlobalConfig: () => createGlobalConfig,
   dateField: () => dateField,
   emailField: () => emailField,
+  externalLinkField: () => externalLinkField,
   field: () => field,
+  formatSlugHook: () => formatSlugHook,
   groupField: () => groupField,
+  internalLinkField: () => internalLinkField,
   jsonField: () => jsonField,
+  linkField: () => linkField,
   numberField: () => numberField,
+  openingHoursField: () => openingHoursField,
   pointField: () => pointField,
   radioField: () => radioField,
   relationshipField: () => relationshipField,
   richTextField: () => richTextField,
   rowField: () => rowField,
   selectField: () => selectField,
+  slugField: () => slugField,
+  socialsField: () => socialsField,
   tabField: () => tabField,
   tabsField: () => tabsField,
   textField: () => textField,
   textareaField: () => textareaField,
+  timeField: () => timeField,
   uiField: () => uiField,
-  uploadField: () => uploadField
+  uploadField: () => uploadField,
+  urlField: () => urlField,
+  weekdaysMap: () => weekdaysMap
 });
 module.exports = __toCommonJS(payload_exports);
-
-// src/payload/custom/slugField/component.tsx
-var import_react = require("react");
-var import_ui = require("@payloadcms/ui");
-
-// src/utils/string.ts
-var import_slugify = __toESM(require("slugify"), 1);
-var formatSlug = (value = "") => (0, import_slugify.default)(value, {
-  lower: true,
-  trim: true
-});
-
-// src/payload/custom/slugField/component.tsx
-var import_jsx_runtime = require("react/jsx-runtime");
-var SlugComponent = ({
-  field: field2,
-  fieldToUse,
-  checkboxFieldPath: checkboxFieldPathFromProps,
-  path,
-  readOnly: readOnlyFromProps
-}) => {
-  const { label } = field2;
-  const checkboxFieldPath = path?.includes(".") ? `${path}.${checkboxFieldPathFromProps}` : checkboxFieldPathFromProps;
-  const { value, setValue } = (0, import_ui.useField)({ path: path || field2.name });
-  const { dispatchFields } = (0, import_ui.useForm)();
-  const checkboxValue = (0, import_ui.useFormFields)(([fields]) => {
-    return fields[checkboxFieldPath]?.value;
-  });
-  const targetFieldValue = (0, import_ui.useFormFields)(([fields]) => {
-    return fields[fieldToUse]?.value;
-  });
-  (0, import_react.useEffect)(() => {
-    if (checkboxValue) {
-      if (targetFieldValue) {
-        const formattedSlug = formatSlug(targetFieldValue);
-        if (value !== formattedSlug) setValue(formattedSlug);
-      } else {
-        if (value !== "") setValue("");
-      }
-    }
-  }, [targetFieldValue, checkboxValue, setValue, value]);
-  const handleLock = (0, import_react.useCallback)(
-    (e) => {
-      e.preventDefault();
-      dispatchFields({
-        type: "UPDATE",
-        path: checkboxFieldPath,
-        value: !checkboxValue
-      });
-    },
-    [checkboxValue, checkboxFieldPath, dispatchFields]
-  );
-  const readOnly = readOnlyFromProps || checkboxValue;
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "field-type slug-field-component", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "label-wrapper", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_ui.FieldLabel, { htmlFor: `field-${path}`, label }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_ui.Button, { className: "lock-button", buttonStyle: "none", onClick: handleLock, children: checkboxValue ? "Unlock" : "Lock" })
-    ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-      import_ui.TextInput,
-      {
-        value,
-        onChange: setValue,
-        path: path || field2.name,
-        readOnly: Boolean(readOnly)
-      }
-    )
-  ] });
-};
 
 // src/payload/fields/fieldConfig.ts
 var fieldConfigInstance = {
@@ -377,6 +318,115 @@ var uiField = (props) => {
   });
 };
 
+// src/utils/object.ts
+function isObject(item) {
+  return item && typeof item === "object" && !Array.isArray(item);
+}
+function deepMerge(target, source) {
+  const output = { ...target };
+  if (isObject(target) && isObject(source)) {
+    Object.keys(source).forEach((key) => {
+      if (isObject(source[key])) {
+        if (!(key in target)) {
+          Object.assign(output, { [key]: source[key] });
+        } else {
+          output[key] = deepMerge(target[key], source[key]);
+        }
+      } else {
+        Object.assign(output, { [key]: source[key] });
+      }
+    });
+  }
+  return output;
+}
+
+// src/payload/utils/createField.ts
+function createField2(fieldFn) {
+  return (props = {}) => {
+    const field2 = fieldFn(props);
+    return deepMerge(field2, props.overrides || {});
+  };
+}
+
+// src/payload/custom/addressField.ts
+var addressField = createField2((props) => {
+  const fieldCondition = (fieldName) => {
+    if (!props.hideFields?.length) return true;
+    return props.hideFields.includes(fieldName) ? false : true;
+  };
+  return groupField({
+    name: props.name ?? "address",
+    label: props?.label,
+    interfaceName: "Address",
+    localized: false,
+    admin: {
+      condition: props?.condition,
+      hideGutter: props?.hideGutter,
+      description: props?.description
+    },
+    fields: [
+      rowField({
+        fields: [
+          textField({
+            name: "addressLine1",
+            label: "Address",
+            localized: false,
+            required: false
+          }),
+          textField({
+            name: "addressLine2",
+            label: "Address extra",
+            localized: false,
+            required: false,
+            admin: {
+              condition: (_, siblingData) => fieldCondition("addressLine2")
+            }
+          })
+        ]
+      }),
+      rowField({
+        fields: [
+          textField({
+            name: "state",
+            label: "State",
+            localized: false,
+            required: false,
+            admin: {
+              condition: (_, siblingData) => fieldCondition("state")
+            }
+          }),
+          textField({
+            name: "city",
+            label: "City",
+            localized: false,
+            required: false,
+            admin: {
+              condition: (_, siblingData) => fieldCondition("city")
+            }
+          }),
+          textField({
+            name: "postalCode",
+            label: "Postal Code",
+            localized: false,
+            required: false,
+            admin: {
+              condition: (_, siblingData) => fieldCondition("postalCode")
+            }
+          })
+        ]
+      }),
+      pointField({
+        name: "location",
+        localized: false,
+        required: false,
+        admin: {
+          condition: (_, siblingData) => fieldCondition("location")
+        }
+      })
+    ]
+  });
+});
+
 // src/payload/utils/blockBuilder.ts
 var blockBuilder = (config) => {
   const helper = blockBuilderHelper({
@@ -451,38 +501,383 @@ var createBlock = (block) => {
   };
 };
 
-// src/utils/object.ts
-function isObject(item) {
-  return item && typeof item === "object" && !Array.isArray(item);
-}
-function deepMerge(target, source) {
-  const output = { ...target };
-  if (isObject(target) && isObject(source)) {
-    Object.keys(source).forEach((key) => {
-      if (isObject(source[key])) {
-        if (!(key in target)) {
-          Object.assign(output, { [key]: source[key] });
-        } else {
-          output[key] = deepMerge(target[key], source[key]);
-        }
-      } else {
-        Object.assign(output, { [key]: source[key] });
-      }
-    });
+// src/payload/custom/linkField.ts
+var linkAppearanceOptions = {
+  default: {
+    label: "Default",
+    value: "default"
+  },
+  button: {
+    label: "Button",
+    value: "button"
+  },
+  cta: {
+    label: "CTA",
+    value: "cta"
+  },
+  link: {
+    label: "Link",
+    value: "link"
+  },
+  custom: {
+    label: "Custom",
+    value: "custom"
   }
-  return output;
-}
+};
+var linkOptions = {
+  reference: {
+    label: "Internal link",
+    value: "reference"
+  },
+  custom: {
+    label: "Custom URL",
+    value: "custom"
+  }
+};
+var linkField = createField2((props) => {
+  const options = rowField({
+    fields: [
+      radioField({
+        name: "type",
+        admin: {
+          layout: "horizontal",
+          width: "50%"
+        },
+        required: true,
+        defaultValue: linkOptions.reference.value,
+        options: Object.values(linkOptions)
+      }),
+      checkboxField({
+        name: "newTab",
+        admin: {
+          style: {
+            alignSelf: "flex-end"
+          },
+          width: "50%"
+        },
+        label: "Open in new tab"
+      })
+    ]
+  });
+  const appearance = selectField({
+    name: "appearance",
+    label: "Appearance",
+    required: true,
+    defaultValue: "default",
+    options: Object.values(linkAppearanceOptions)
+  });
+  const types = [
+    internalLinkField({
+      relationTo: props.relationTo,
+      condition: (_, siblingData) => siblingData?.type === "reference"
+    }),
+    externalLinkField({
+      condition: (_, siblingData) => siblingData?.type === "custom"
+    })
+  ];
+  const label = textField({
+    name: "label",
+    label: "Link Text",
+    required: true
+  });
+  const field2 = groupField({
+    name: props.name || "link",
+    label: props.label || "Link",
+    admin: {
+      hideGutter: true,
+      condition: props.condition
+    },
+    fields: [options, ...types, label, appearance]
+  });
+  return deepMerge(field2, props.overrides);
+});
+var externalLinkField = createField2((props) => {
+  const field2 = textField({
+    name: "url",
+    admin: {
+      condition: props.condition,
+      hidden: props.hidden
+    },
+    label: props.label || "Custom URL",
+    required: props.required || true
+  });
+  return field2;
+});
+var internalLinkField = createField2((props) => {
+  const field2 = relationshipField({
+    name: "reference",
+    admin: {
+      condition: props.condition
+    },
+    label: props.label || "Document to link to",
+    maxDepth: 1,
+    relationTo: props.relationTo,
+    required: props.required || true
+  });
+  return field2;
+});
 
-// src/payload/utils/createField.ts
-function createField2(fieldFn) {
-  return (props = {}) => {
-    const field2 = fieldFn(props);
-    return deepMerge(field2, props.overrides || {});
+// src/utils/string.ts
+var import_slugify = __toESM(require("slugify"), 1);
+var capitalize = (str = "") => {
+  if (!str.length) {
+    return "";
+  }
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+var formatSlug = (value = "") => (0, import_slugify.default)(value, {
+  lower: true,
+  trim: true
+});
+
+// src/payload/custom/slugField/index.ts
+var formatSlugHook = (fallback) => ({ data, operation, originalDoc, value }) => {
+  if (typeof value === "string") {
+    return formatSlug(value);
+  }
+  if (operation === "create" || !data?.slug) {
+    const fallbackData = data?.[fallback] || data?.[fallback];
+    if (fallbackData && typeof fallbackData === "string") {
+      return formatSlug(fallbackData);
+    }
+  }
+  return value;
+};
+var slugField = (fieldToUse = "title", overrides = {}) => {
+  const { slugOverrides, checkboxOverrides } = overrides;
+  const checkBoxField = {
+    name: "slugLock",
+    type: "checkbox",
+    defaultValue: true,
+    admin: {
+      hidden: true,
+      position: "sidebar"
+    },
+    ...checkboxOverrides
   };
-}
+  const field2 = textField({
+    name: "slug",
+    label: "Slug",
+    index: true,
+    ...slugOverrides || {},
+    hooks: {
+      // Kept this in for hook or API based updates
+      beforeValidate: [formatSlugHook(fieldToUse)]
+    },
+    admin: {
+      position: "sidebar",
+      ...slugOverrides?.admin || {},
+      components: {
+        Field: {
+          path: "@konstant/payload/components#SlugComponent",
+          //
+          clientProps: {
+            fieldToUse,
+            checkboxFieldPath: checkBoxField.name
+          }
+        }
+      }
+    }
+  });
+  return [field2, checkBoxField];
+};
+
+// src/payload/custom/timeField.ts
+var timeField = createField2((props) => {
+  return dateField({
+    name: props.name ?? "time",
+    label: props.label ?? "Time",
+    required: props?.required,
+    localized: false,
+    // defaultValue: name === "open" ? "09:00" : "16:00",
+    admin: {
+      condition: props?.condition,
+      description: props?.description,
+      date: {
+        pickerAppearance: "timeOnly",
+        timeFormat: "HH:mm",
+        displayFormat: "HH:mm"
+      }
+    }
+  });
+});
+
+// src/payload/custom/urlField.ts
+var urlField = createField2((props) => {
+  const required = props?.required ?? true;
+  return textField({
+    name: props?.name ?? "url",
+    label: props?.label ?? "Url",
+    hasMany: false,
+    required,
+    admin: {
+      condition: props?.condition
+    },
+    validate: (val) => {
+      if (!required && !val) return true;
+      try {
+        new URL(val);
+        return true;
+      } catch (err) {
+        return "Invalid URL";
+      }
+    }
+  });
+});
+
+// src/payload/custom/openingHoursField.ts
+var weekdaysMap = {
+  1: "Mondays",
+  2: "Tuesdays",
+  3: "Wednesdays",
+  4: "Thursdays",
+  5: "Fridays",
+  6: "Saturdays",
+  7: "Sundays"
+};
+var dayOptions = Object.keys(weekdaysMap).map((key) => ({
+  label: weekdaysMap[key] || "",
+  value: key
+}));
+var openingHoursField = createField2((props) => {
+  const items = arrayField({
+    name: "items",
+    label: "Opening Hours",
+    fields: [
+      selectField({
+        name: "days",
+        hasMany: true,
+        required: true,
+        localized: false,
+        defaultValue: [],
+        options: dayOptions
+      }),
+      textField({ name: "label", required: true }),
+      ...timeFields()
+    ]
+  });
+  const customOpeningHours = arrayField({
+    name: "custom",
+    label: "Custom Opening Hours",
+    fields: [
+      textField({ name: "label", required: true }),
+      dateField({
+        name: "date",
+        label: "Date",
+        required: true,
+        admin: {
+          date: {
+            pickerAppearance: "dayOnly",
+            displayFormat: "d MMM yyy"
+          }
+        }
+      }),
+      ...timeFields()
+    ]
+  });
+  return groupField({
+    name: "openingHours",
+    interfaceName: "OpeningHours",
+    fields: [
+      rowField({
+        fields: [
+          textField({
+            name: "openLabel",
+            admin: { width: "50%" }
+          }),
+          textField({
+            name: "closedLabel",
+            admin: { width: "50%" }
+          })
+        ]
+      }),
+      rowField({
+        fields: [
+          textField({
+            name: "openNowLabel",
+            admin: { width: "50%" }
+          }),
+          textField({
+            name: "closedNowLabel",
+            admin: { width: "50%" }
+          })
+        ]
+      }),
+      items,
+      customOpeningHours
+    ]
+  });
+});
+var timeFields = () => {
+  return [
+    rowField({
+      admin: {
+        condition: (_, siblingData) => !siblingData.isClosed
+      },
+      fields: ["openingTime", "closingTime"].map(
+        (name) => timeField({ name, label: capitalize(name) })
+      )
+    }),
+    checkboxField({ name: "isClosed", label: "Closed whole day" }),
+    textField({
+      name: "closedLabel",
+      admin: { condition: (_, siblingData) => siblingData.isClosed }
+    })
+  ];
+};
+
+// src/payload/custom/socialMediaField.ts
+var socialsOptions = {
+  facebook: {
+    label: "Facebook",
+    value: "facebook"
+  },
+  instagram: {
+    label: "Instagram",
+    value: "instagram"
+  },
+  twitter: {
+    label: "Twitter",
+    value: "twitter"
+  },
+  linkedin: {
+    label: "LinkedIn",
+    value: "linkedin"
+  },
+  strava: {
+    label: "Strava",
+    value: "strava"
+  }
+};
+var fields = (showOnly = []) => Object.keys(socialsOptions).map((key) => {
+  const socialKey = key;
+  const show = showOnly.length === 0 || showOnly.includes(socialKey);
+  return urlField({
+    name: socialKey,
+    label: socialsOptions[socialKey].label,
+    required: false,
+    condition: () => show,
+    overrides: {
+      admin: {
+        width: "50%"
+      }
+    }
+  });
+});
+var socialsField = createField2((props) => {
+  return groupField({
+    name: props.name || "socialMedia",
+    label: props.label || "Social Media",
+    fields: [
+      rowField({
+        fields: fields(props.showOnly)
+      })
+    ]
+  });
+});
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  SlugComponent,
+  addressField,
   arrayField,
   blockBuilder,
   blockBuilderHelper,
@@ -495,21 +890,31 @@ function createField2(fieldFn) {
   createGlobalConfig,
   dateField,
   emailField,
+  externalLinkField,
   field,
+  formatSlugHook,
   groupField,
+  internalLinkField,
   jsonField,
+  linkField,
   numberField,
+  openingHoursField,
   pointField,
   radioField,
   relationshipField,
   richTextField,
   rowField,
   selectField,
+  slugField,
+  socialsField,
   tabField,
   tabsField,
   textField,
   textareaField,
+  timeField,
   uiField,
-  uploadField
+  uploadField,
+  urlField,
+  weekdaysMap
 });
 //# sourceMappingURL=index.cjs.map
