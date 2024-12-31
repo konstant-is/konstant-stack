@@ -1,7 +1,12 @@
 import { textField } from "@/payload/fields/fields";
 import { formatSlug } from "@/utils/string";
-
+import path from "path";
+import { fileURLToPath } from "url";
 import type { CheckboxField, Field, FieldHook, TextField } from "payload";
+
+// Resolve the current directory
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const formatSlugHook =
   (fallback: string): FieldHook =>
@@ -56,7 +61,7 @@ export const slugField: Slug = (fieldToUse = "title", overrides = {}) => {
       ...(slugOverrides?.admin || {}),
       components: {
         Field: {
-          path: "@/payload/components#SlugComponent",
+          path: `${path.join(__dirname, "payload", "components")}#SlugComponent`,
           clientProps: {
             fieldToUse,
             checkboxFieldPath: checkBoxField.name,

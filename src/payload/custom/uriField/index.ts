@@ -19,10 +19,6 @@ const beforeValidateHook: FieldHook = async ({
 };
 
 export const uriField = () => {
-  // Dynamically resolve the path to the component
-  const resolvedPath = path.join(__dirname, "payload", "components");
-  console.log(resolvedPath);
-
   return textField({
     name: "uri",
     index: false,
@@ -38,7 +34,7 @@ export const uriField = () => {
       position: "sidebar",
       components: {
         Field: {
-          path: `${resolvedPath}#UriComponent`,
+          path: `${path.join(__dirname, "payload", "components")}#UriComponent`,
         },
       },
     },
