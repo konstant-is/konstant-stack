@@ -3,6 +3,7 @@ import { defineConfig } from "tsup";
 
 export default defineConfig((options) => ({
   entry: [
+    "src/utils/index.ts",
     "src/utils/date.ts",
     "src/utils/object.ts",
     "src/utils/string.ts",

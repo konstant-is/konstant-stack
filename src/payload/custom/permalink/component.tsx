@@ -1,15 +1,8 @@
 "use client";
 
-import React from "react";
-import {
-  useAllFormFields,
-  useConfig,
-  useDocumentInfo,
-  useFormFields,
-} from "@payloadcms/ui";
+import { useDocumentInfo, useFormFields } from "@payloadcms/ui";
 import { UIFieldClientComponent } from "payload";
-
-import { getClientSideURL } from "@/lib/getUrl";
+import { getClientSideURL } from "@/utils/getUrl";
 
 type PermalinkFieldProps = {
   fieldToUse: string;
