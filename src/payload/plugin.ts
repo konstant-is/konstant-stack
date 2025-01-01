@@ -1,4 +1,4 @@
-import { Config, Plugin } from "payload";
+import { Config } from "payload";
 
 export const konstantFieldsPlugin =
   (pluginOptions?: {}) =>
