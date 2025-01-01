@@ -20,46 +20,51 @@ is_chore_commit() {
   [[ "$last_commit_message" == chore:* ]]
 }
 
-build_dist() {
+get_version() {
+  node -p "require('./package.json').version"
+}
+
+push_tags_if_new_version() {
+  NEW_VERSION=$(get_version) # Get the latest version after the bump
+  if [[ "$CURRENT_VERSION" != "$NEW_VERSION" ]]; then
+    log "Tagging new version: v$NEW_VERSION..."
+    git tag -a "v$NEW_VERSION" -m "Release version $NEW_VERSION"
+    git push --tags
+    log "Tags pushed successfully."
+  else
+    log "No new version detected. Skipping tag push."
+  fi
+}
+
+run_chores() {
+  log "Running chores..."
+
   log "Building dist folder..."
   pnpm build
   log "Build completed."
-}
-
-version_bump() {
-  if has_uncommitted_changes; then
-    log "Uncommitted changes detected. Skipping version bump."
-    return
-  fi
 
   log "Bumping version..."
   pnpm run ci:version-patch
   log "Version bumped successfully."
-}
 
-push_changes() {
   log "Staging and pushing changes..."
-  git add package.json
-  git add dist
+  git add package.json dist
+  git commit -m "chore: update dist [auto-generated]"
+  git push
 
-  if has_uncommitted_changes; then
-    git commit -m "chore: update dist [auto-generated]"
-    git push
-  else
-    log "No changes to push."
-  fi
+  push_tags_if_new_version
+  log "Chores completed."
 }
 
 # Main execution
-log "Starting pre-push hook..."
+CURRENT_VERSION=$(get_version) # Set the initial version
+log "Starting pre-push hook... Current version: $CURRENT_VERSION"
 
 if is_chore_commit; then
   log "Detected chore commit. Skipping hook."
   exit 0
 fi
 
-build_dist
-version_bump
-push_changes
+run_chores
 
 log "Pre-push hook completed successfully."
