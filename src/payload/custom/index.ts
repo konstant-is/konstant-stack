@@ -1,3 +1,4 @@
+export * from "./permalink";
 export * from "./rowLabel";
 export * from "./slugField";
 export * from "./uriField";
