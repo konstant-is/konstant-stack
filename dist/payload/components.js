@@ -1,7 +1,7 @@
 "use client";
 import {
-  arrayRowLabelField
-} from "../chunk-GII5FM2X.js";
+  getNestedProperty
+} from "../chunk-Y4FC33LH.js";
 import {
   formatSlug
 } from "../chunk-3I3J54W3.js";
@@ -92,9 +92,41 @@ var UriComponent = ({ path, field }) => {
     )
   ] });
 };
+
+// src/payload/custom/rowLabel/component.tsx
+import { useRowLabel } from "@payloadcms/ui";
+import { jsx as jsx3 } from "react/jsx-runtime";
+var ArrayRowLabel = (props) => {
+  const { label } = useArrayRowLabel(props);
+  return /* @__PURE__ */ jsx3("div", { children: label });
+};
+var useArrayRowLabel = (props) => {
+  const { prefix, fieldName, fallback } = props;
+  const { data, rowNumber } = useRowLabel();
+  const rowNr = `${(rowNumber || 0) + 1}`;
+  function getField() {
+    const prop = getNestedProperty(data, fieldName);
+    if (!prop) {
+      console.error(`Field ${fieldName} not found in data`, data);
+    }
+    return prop;
+  }
+  const getLabel = () => {
+    const field = getField();
+    return field || fallback || "Item";
+  };
+  const getFullLabel = () => {
+    const label = getLabel();
+    return `${prefix || ""} ${rowNr}: ${label}`;
+  };
+  return {
+    label: getFullLabel(),
+    rowNr: `${(rowNumber || 0) + 1}`
+  };
+};
 export {
+  ArrayRowLabel,
   SlugComponent,
-  UriComponent,
-  arrayRowLabelField
+  UriComponent
 };
 //# sourceMappingURL=components.js.map

@@ -31,9 +31,9 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // src/payload/components.ts
 var components_exports = {};
 __export(components_exports, {
+  ArrayRowLabel: () => ArrayRowLabel,
   SlugComponent: () => SlugComponent,
-  UriComponent: () => UriComponent,
-  arrayRowLabelField: () => arrayRowLabelField
+  UriComponent: () => UriComponent
 });
 module.exports = __toCommonJS(components_exports);
 
@@ -126,17 +126,49 @@ var UriComponent = ({ path, field }) => {
   ] });
 };
 
-// src/payload/custom/rowLabel/index.ts
-var arrayRowLabelField = (props) => {
+// src/utils/object.ts
+var getNestedProperty = (obj, path) => {
+  return path.split(".").reduce(
+    (acc, key) => acc && acc[key] !== void 0 ? acc[key] : void 0,
+    obj
+  );
+};
+
+// src/payload/custom/rowLabel/component.tsx
+var import_ui3 = require("@payloadcms/ui");
+var import_jsx_runtime3 = require("react/jsx-runtime");
+var ArrayRowLabel = (props) => {
+  const { label } = useArrayRowLabel(props);
+  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { children: label });
+};
+var useArrayRowLabel = (props) => {
+  const { prefix, fieldName, fallback } = props;
+  const { data, rowNumber } = (0, import_ui3.useRowLabel)();
+  const rowNr = `${(rowNumber || 0) + 1}`;
+  function getField() {
+    const prop = getNestedProperty(data, fieldName);
+    if (!prop) {
+      console.error(`Field ${fieldName} not found in data`, data);
+    }
+    return prop;
+  }
+  const getLabel = () => {
+    const field = getField();
+    return field || fallback || "Item";
+  };
+  const getFullLabel = () => {
+    const label = getLabel();
+    return `${prefix || ""} ${rowNr}: ${label}`;
+  };
   return {
-    path: "@konstant/stack/payload/components#ArrayRowLabel",
-    clientProps: props
+    label: getFullLabel(),
+    rowNr: `${(rowNumber || 0) + 1}`
   };
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+  ArrayRowLabel,
   SlugComponent,
-  UriComponent,
-  arrayRowLabelField
+  UriComponent
 });
 //# sourceMappingURL=components.cjs.map

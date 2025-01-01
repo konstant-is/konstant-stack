@@ -1,6 +1,16 @@
-export { a as arrayRowLabelField } from '../index-B4SXuD7h.js';
 import * as payload from 'payload';
 import { FieldHook, Field, TextField, CheckboxField, Block, CollectionConfig, GlobalConfig, TextareaField, NumberField, RichTextField, SelectField, TabsField, Tab, BlocksField, UploadField, GroupField, RowField, RadioField, RelationshipField, ArrayField, DateField, CollapsibleField, PointField, EmailField, JSONField, UIField, Config } from 'payload';
+
+declare const arrayRowLabelField: (props: {
+    prefix: string;
+    fieldName: string;
+}) => {
+    path: string;
+    clientProps: {
+        prefix: string;
+        fieldName: string;
+    };
+};
 
 declare const formatSlugHook: (fallback: string) => FieldHook;
 type Overrides = {
@@ -152,4 +162,4 @@ declare const uiField: (props: Omit<UIField, "type">) => Field;
 
 declare const konstantFieldsPlugin: (config: Config) => Config;
 
-export { type CreateFieldProps, addressField, arrayField, blockBuilder, blockBuilderHelper, blocksField, checkboxField, collapsibleField, createBlock, createCollectionConfig, createField, createGlobalConfig, dateField, emailField, externalLinkField, field, formatSlugHook, groupField, internalLinkField, jsonField, konstantFieldsPlugin, linkField, numberField, openingHoursField, pointField, radioField, relationshipField, richTextField, rowField, selectField, slugField, socialsField, tabField, tabsField, textField, textareaField, timeField, uiField, uploadField, uriField, urlField, weekdaysMap };
+export { type CreateFieldProps, addressField, arrayField, arrayRowLabelField, blockBuilder, blockBuilderHelper, blocksField, checkboxField, collapsibleField, createBlock, createCollectionConfig, createField, createGlobalConfig, dateField, emailField, externalLinkField, field, formatSlugHook, groupField, internalLinkField, jsonField, konstantFieldsPlugin, linkField, numberField, openingHoursField, pointField, radioField, relationshipField, richTextField, rowField, selectField, slugField, socialsField, tabField, tabsField, textField, textareaField, timeField, uiField, uploadField, uriField, urlField, weekdaysMap };
