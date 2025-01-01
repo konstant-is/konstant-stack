@@ -811,14 +811,6 @@ var socialsField = createField2((props) => {
     ]
   });
 });
-
-// src/payload/plugin.ts
-var payloadFieldsPlugin = () => {
-  return (config) => {
-    console.log("Payload Fields Plugin Loaded");
-    return config;
-  };
-};
 export {
   addressField,
   arrayField,
@@ -843,7 +835,6 @@ export {
   linkField,
   numberField,
   openingHoursField,
-  payloadFieldsPlugin,
   pointField,
   radioField,
   relationshipField,

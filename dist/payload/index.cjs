@@ -53,7 +53,6 @@ __export(payload_exports, {
   linkField: () => linkField,
   numberField: () => numberField,
   openingHoursField: () => openingHoursField,
-  payloadFieldsPlugin: () => payloadFieldsPlugin,
   pointField: () => pointField,
   radioField: () => radioField,
   relationshipField: () => relationshipField,
@@ -920,14 +919,6 @@ var socialsField = createField2((props) => {
     ]
   });
 });
-
-// src/payload/plugin.ts
-var payloadFieldsPlugin = () => {
-  return (config) => {
-    console.log("Payload Fields Plugin Loaded");
-    return config;
-  };
-};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   addressField,
@@ -953,7 +944,6 @@ var payloadFieldsPlugin = () => {
   linkField,
   numberField,
   openingHoursField,
-  payloadFieldsPlugin,
   pointField,
   radioField,
   relationshipField,
