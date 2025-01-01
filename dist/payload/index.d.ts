@@ -150,6 +150,6 @@ declare const emailField: (props: Omit<EmailField, "type">) => Field;
 declare const jsonField: (props: Omit<JSONField, "type">) => Field;
 declare const uiField: (props: Omit<UIField, "type">) => Field;
 
-declare const konstantFieldsPlugin: (pluginOptions?: {}) => (config: Config) => Config;
+declare const konstantFieldsPlugin: (config: Config) => Config;
 
 export { type CreateFieldProps, addressField, arrayField, blockBuilder, blockBuilderHelper, blocksField, checkboxField, collapsibleField, createBlock, createCollectionConfig, createField, createGlobalConfig, dateField, emailField, externalLinkField, field, formatSlugHook, groupField, internalLinkField, jsonField, konstantFieldsPlugin, linkField, numberField, openingHoursField, pointField, radioField, relationshipField, richTextField, rowField, selectField, slugField, socialsField, tabField, tabsField, textField, textareaField, timeField, uiField, uploadField, uriField, urlField, weekdaysMap };

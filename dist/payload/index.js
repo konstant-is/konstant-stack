@@ -813,7 +813,7 @@ var socialsField = createField2((props) => {
 });
 
 // src/payload/plugin.ts
-var konstantFieldsPlugin = (pluginOptions) => (config) => {
+var konstantFieldsPlugin = (config) => {
   return config;
 };
 export {
