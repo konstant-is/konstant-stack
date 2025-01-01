@@ -22,6 +22,7 @@ var utils_exports = {};
 __export(utils_exports, {
   canUseDom: () => canUseDom,
   getClientSideURL: () => getClientSideURL,
+  getReference: () => getReference,
   getServerSideURL: () => getServerSideURL
 });
 module.exports = __toCommonJS(utils_exports);
@@ -53,10 +54,19 @@ var getClientSideURL = () => {
   }
   return process.env.NEXT_PUBLIC_SERVER_URL || "";
 };
+
+// src/utils/getReference.ts
+function getReference(ref) {
+  if (typeof ref === "string") {
+    return null;
+  }
+  return ref;
+}
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   canUseDom,
   getClientSideURL,
+  getReference,
   getServerSideURL
 });
 //# sourceMappingURL=index.cjs.map
