@@ -1,14 +1,10 @@
-import { Config } from "payload";
+import { Config, Plugin } from "payload";
 
-type PluginOptions = {};
-
-export const konstantFieldsPlugin = (
-  pluginOptions?: PluginOptions,
-): ((incomingConfig: Config) => Promise<Config>) => {
+export const konstantFieldsPlugin: Plugin = async (
+  config: Config,
+): Promise<Config> => {
   // You can extend the Payload config here if needed
 
-  return async (incomingConfig: Config): Promise<Config> => {
-    // Modify the incomingConfig as needed
-    return incomingConfig;
-  };
+  // Modify the incomingConfig as needed
+  return config;
 };
