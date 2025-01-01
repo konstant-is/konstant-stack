@@ -1,36 +1,32 @@
 #!/bin/bash
 set -e
-trap 'log_error "An error occurred. Exiting script."; exit 1' ERR
+trap 'echo "$(date +"%Y-%m-%d %H:%M:%S") - An error occurred. Exiting script."; exit 1' ERR
 
 # Utility functions
 log() {
   echo "$(date +"%Y-%m-%d %H:%M:%S") - $1"
 }
 
-log_error() {
-  >&2 log "$1"
-}
-
 get_last_commit_message() {
   git log -1 --pretty=%B
-}
-
-is_version_bump_commit() {
-  local last_commit_message=$(get_last_commit_message)
-  [[ "$last_commit_message" == "chore: patch version" ]]
 }
 
 has_uncommitted_changes() {
   [[ -n "$(git status --porcelain)" ]]
 }
 
-# Version patch function
-version_patch() {
-  if is_version_bump_commit; then
-    log "Latest commit is a version bump. Skipping version_patch."
-    return
-  fi
+is_chore_commit() {
+  local last_commit_message=$(get_last_commit_message)
+  [[ "$last_commit_message" == chore:* ]]
+}
 
+build_dist() {
+  log "Building dist folder..."
+  pnpm build
+  log "Build completed."
+}
+
+version_bump() {
   if has_uncommitted_changes; then
     log "Uncommitted changes detected. Skipping version bump."
     return
@@ -38,46 +34,32 @@ version_patch() {
 
   log "Bumping version..."
   pnpm run ci:version-patch
+  log "Version bumped successfully."
+}
 
-  # Get the updated version from package.json
-  local version=$(node -p "require('./package.json').version")
-
-  log "Staging version bump changes..."
+push_changes() {
+  log "Staging and pushing changes..."
   git add package.json
+  git add dist
 
-  log "Committing version bump..."
-  git commit -m "chore: patch version"
-
-  log "Creating tag for version $version..."
-  git tag -a "v$version" -m "Release version $version"
-
-  log "Pushing changes and tag to remote..."
-  git push
-  git push origin "v$version"
-
-  log "Version patch process completed."
-}
-
-run_build() {
-  log "Running build process..."
-  if ! pnpm build; then
-    log "Build failed. Aborting push."
-    exit 1
-  fi
-  log "Build succeeded."
-}
-
-commit_dist_changes() {
-  if [ -n "$(git status dist --porcelain)" ]; then
-    log "Changes detected in 'dist' folder. Committing..."
-    git add dist
+  if has_uncommitted_changes; then
     git commit -m "chore: update dist [auto-generated]"
+    git push
   else
-    log "No changes in 'dist'. Skipping commit."
+    log "No changes to push."
   fi
 }
 
 # Main execution
-run_build
-commit_dist_changes
-version_patch
+log "Starting pre-push hook..."
+
+if is_chore_commit; then
+  log "Detected chore commit. Skipping hook."
+  exit 0
+fi
+
+build_dist
+version_bump
+push_changes
+
+log "Pre-push hook completed successfully."
