@@ -54,6 +54,7 @@ __export(payload_exports, {
   linkField: () => linkField,
   numberField: () => numberField,
   openingHoursField: () => openingHoursField,
+  permalinkField: () => permalinkField,
   pointField: () => pointField,
   radioField: () => radioField,
   relationshipField: () => relationshipField,
@@ -74,6 +75,19 @@ __export(payload_exports, {
   weekdaysMap: () => weekdaysMap
 });
 module.exports = __toCommonJS(payload_exports);
+
+// src/payload/custom/permalink/index.ts
+var permalinkField = () => {
+  return {
+    name: "permalink",
+    type: "ui",
+    admin: {
+      components: {
+        Field: "@konstant/stack/payload/components#PermalinkField"
+      }
+    }
+  };
+};
 
 // src/payload/custom/rowLabel/index.ts
 var arrayRowLabelField = (props) => {
@@ -951,6 +965,7 @@ var konstantFieldsPlugin = (config) => {
   linkField,
   numberField,
   openingHoursField,
+  permalinkField,
   pointField,
   radioField,
   relationshipField,

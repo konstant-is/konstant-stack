@@ -6,6 +6,19 @@ import {
   formatSlug
 } from "../chunk-3I3J54W3.js";
 
+// src/payload/custom/permalink/index.ts
+var permalinkField = () => {
+  return {
+    name: "permalink",
+    type: "ui",
+    admin: {
+      components: {
+        Field: "@konstant/stack/payload/components#PermalinkField"
+      }
+    }
+  };
+};
+
 // src/payload/custom/rowLabel/index.ts
 var arrayRowLabelField = (props) => {
   return {
@@ -846,6 +859,7 @@ export {
   linkField,
   numberField,
   openingHoursField,
+  permalinkField,
   pointField,
   radioField,
   relationshipField,
