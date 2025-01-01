@@ -922,10 +922,8 @@ var socialsField = createField2((props) => {
 });
 
 // src/payload/plugin.ts
-var konstantFieldsPlugin = (pluginOptions) => {
-  return async (incomingConfig) => {
-    return incomingConfig;
-  };
+var konstantFieldsPlugin = async (config) => {
+  return config;
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {

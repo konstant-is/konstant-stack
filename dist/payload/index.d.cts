@@ -1,6 +1,6 @@
 export { a as arrayRowLabelField } from '../index-B4SXuD7h.cjs';
 import * as payload from 'payload';
-import { FieldHook, Field, TextField, CheckboxField, Block, CollectionConfig, GlobalConfig, TextareaField, NumberField, RichTextField, SelectField, TabsField, Tab, BlocksField, UploadField, GroupField, RowField, RadioField, RelationshipField, ArrayField, DateField, CollapsibleField, PointField, EmailField, JSONField, UIField, Config } from 'payload';
+import { FieldHook, Field, TextField, CheckboxField, Block, CollectionConfig, GlobalConfig, TextareaField, NumberField, RichTextField, SelectField, TabsField, Tab, BlocksField, UploadField, GroupField, RowField, RadioField, RelationshipField, ArrayField, DateField, CollapsibleField, PointField, EmailField, JSONField, UIField, Plugin } from 'payload';
 
 declare const formatSlugHook: (fallback: string) => FieldHook;
 type Overrides = {
@@ -150,7 +150,6 @@ declare const emailField: (props: Omit<EmailField, "type">) => Field;
 declare const jsonField: (props: Omit<JSONField, "type">) => Field;
 declare const uiField: (props: Omit<UIField, "type">) => Field;
 
-type PluginOptions = {};
-declare const konstantFieldsPlugin: (pluginOptions?: PluginOptions) => ((incomingConfig: Config) => Promise<Config>);
+declare const konstantFieldsPlugin: Plugin;
 
 export { type CreateFieldProps, addressField, arrayField, blockBuilder, blockBuilderHelper, blocksField, checkboxField, collapsibleField, createBlock, createCollectionConfig, createField, createGlobalConfig, dateField, emailField, externalLinkField, field, formatSlugHook, groupField, internalLinkField, jsonField, konstantFieldsPlugin, linkField, numberField, openingHoursField, pointField, radioField, relationshipField, richTextField, rowField, selectField, slugField, socialsField, tabField, tabsField, textField, textareaField, timeField, uiField, uploadField, uriField, urlField, weekdaysMap };

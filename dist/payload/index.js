@@ -813,10 +813,8 @@ var socialsField = createField2((props) => {
 });
 
 // src/payload/plugin.ts
-var konstantFieldsPlugin = (pluginOptions) => {
-  return async (incomingConfig) => {
-    return incomingConfig;
-  };
+var konstantFieldsPlugin = async (config) => {
+  return config;
 };
 export {
   addressField,
