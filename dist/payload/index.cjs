@@ -50,6 +50,7 @@ __export(payload_exports, {
   groupField: () => groupField,
   internalLinkField: () => internalLinkField,
   jsonField: () => jsonField,
+  konstantFieldsPlugin: () => konstantFieldsPlugin,
   linkField: () => linkField,
   numberField: () => numberField,
   openingHoursField: () => openingHoursField,
@@ -919,6 +920,14 @@ var socialsField = createField2((props) => {
     ]
   });
 });
+
+// src/payload/plugin.ts
+var konstantFieldsPlugin = () => {
+  return (config) => {
+    console.log("Payload Fields Plugin Loaded");
+    return config;
+  };
+};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   addressField,
@@ -941,6 +950,7 @@ var socialsField = createField2((props) => {
   groupField,
   internalLinkField,
   jsonField,
+  konstantFieldsPlugin,
   linkField,
   numberField,
   openingHoursField,
