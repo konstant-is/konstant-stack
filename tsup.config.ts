@@ -16,7 +16,7 @@ export default defineConfig((options) => ({
   // minify: true, // Minify output
   clean: true, // Clean output directory before building
   css: true, // Include CSS in the build
-  external: ["react"],
+  external: ["react", "payload"],
   esbuildPlugins: [
     sassPlugin({
       type: "css",

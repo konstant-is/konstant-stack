@@ -58,5 +58,26 @@ version_patch() {
   log "Version patch process completed."
 }
 
+run_build() {
+  log "Running build process..."
+  if ! pnpm build; then
+    log "Build failed. Aborting push."
+    exit 1
+  fi
+  log "Build succeeded."
+}
+
+commit_dist_changes() {
+  if [ -n "$(git status dist --porcelain)" ]; then
+    log "Changes detected in 'dist' folder. Committing..."
+    git add dist
+    git commit -m "chore: update dist [auto-generated]"
+  else
+    log "No changes in 'dist'. Skipping commit."
+  fi
+}
+
 # Main execution
+run_build
+commit_dist_changes
 version_patch
