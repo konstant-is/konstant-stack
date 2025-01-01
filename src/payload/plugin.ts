@@ -1,4 +1,4 @@
-import { Config } from "payload/config";
+import { Config } from "payload";
 
 export const payloadFieldsPlugin = (): ((config: Config) => Config) => {
   return (config) => {
