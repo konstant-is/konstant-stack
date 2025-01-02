@@ -326,14 +326,11 @@ var slugField = (fieldToUse = "title", overrides = {}) => {
 
 // src/payload/custom/uriField/index.ts
 var beforeValidateHook = async ({
-  data,
+  data
   // incoming data to update or create with
-  req,
-  // full express request
-  originalDoc
-  // original document
 }) => {
-  const breadcrumbs = (data?.breadcrumbs || []).reverse();
+  const breadcrumbs = Array.isArray(data?.breadcrumbs) ? [...data.breadcrumbs] : [];
+  breadcrumbs.reverse();
   return breadcrumbs[0]?.url || "";
 };
 var uriField = () => {
