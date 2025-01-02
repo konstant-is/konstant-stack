@@ -126,7 +126,6 @@ var UriComponent = ({ path, field }) => {
           /* @__PURE__ */ jsx3(
             TextInput2,
             {
-              id: `field-${path}`,
               value,
               onChange: setValue,
               path: path || field.name,

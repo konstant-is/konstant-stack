@@ -174,7 +174,6 @@ var UriComponent = ({ path, field }) => {
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
             import_ui3.TextInput,
             {
-              id: `field-${path}`,
               value,
               onChange: setValue,
               path: path || field.name,
