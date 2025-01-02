@@ -34,7 +34,6 @@ export const UriComponent = ({ path, field }: UriFieldProps) => {
         style={{ display: "flex", alignItems: "center", gap: "8px" }}
       >
         <TextInput
-          id={`field-${path}`}
           value={value}
           onChange={setValue}
           path={path || field.name}

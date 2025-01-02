@@ -15,10 +15,10 @@ import { jsx, jsxs } from "react/jsx-runtime";
 var PermalinkField = () => {
   const serverURL = getClientSideURL();
   const { id, collectionSlug } = useDocumentInfo();
-  const targetFieldValue = useFormFields(([fields]) => {
+  const [slugFieldValue, setSlugFieldValue] = useFormFields(([fields]) => {
     return fields["slug"]?.value;
   });
-  const uriFieldValue = useFormFields(([fields]) => {
+  const [uriFieldValue, setUriFieldValue] = useFormFields(([fields]) => {
     return fields["uri"]?.value;
   });
   if (!id) {
@@ -101,21 +101,61 @@ var SlugComponent = ({
 
 // src/payload/custom/uriField/component.tsx
 import { FieldLabel as FieldLabel2, TextInput as TextInput2, useField as useField2 } from "@payloadcms/ui";
+import { useState } from "react";
 import { jsx as jsx3, jsxs as jsxs3 } from "react/jsx-runtime";
 var UriComponent = ({ path, field }) => {
   const { value, setValue } = useField2({ path: path || field.name });
   const { label } = field;
+  const [copied, setCopied] = useState(false);
+  const handleCopyToClipboard = () => {
+    if (value) {
+      navigator.clipboard.writeText(value).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2e3);
+      });
+    }
+  };
   return /* @__PURE__ */ jsxs3("div", { className: "field-type uri-field-component", children: [
     /* @__PURE__ */ jsx3("div", { className: "label-wrapper", children: /* @__PURE__ */ jsx3(FieldLabel2, { htmlFor: `field-${path}`, label }) }),
-    /* @__PURE__ */ jsx3(
-      TextInput2,
+    /* @__PURE__ */ jsxs3(
+      "div",
       {
-        value,
-        onChange: setValue,
-        path: path || field.name,
-        readOnly: true
+        className: "input-wrapper",
+        style: { display: "flex", alignItems: "center", gap: "8px" },
+        children: [
+          /* @__PURE__ */ jsx3(
+            TextInput2,
+            {
+              id: `field-${path}`,
+              value,
+              onChange: setValue,
+              path: path || field.name,
+              readOnly: true,
+              "aria-readonly": "true",
+              style: { flex: "1" }
+            }
+          ),
+          /* @__PURE__ */ jsx3(
+            "button",
+            {
+              type: "button",
+              onClick: handleCopyToClipboard,
+              title: "Copy to clipboard",
+              className: "copy-button",
+              style: {
+                padding: "8px",
+                backgroundColor: "#ddd",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer"
+              },
+              children: "\u{1F4CB}"
+            }
+          )
+        ]
       }
-    )
+    ),
+    copied && /* @__PURE__ */ jsx3("small", { style: { color: "green" }, children: "Copied to clipboard!" })
   ] });
 };
 

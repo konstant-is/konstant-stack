@@ -61,10 +61,10 @@ var import_jsx_runtime = require("react/jsx-runtime");
 var PermalinkField = () => {
   const serverURL = getClientSideURL();
   const { id, collectionSlug } = (0, import_ui.useDocumentInfo)();
-  const targetFieldValue = (0, import_ui.useFormFields)(([fields]) => {
+  const [slugFieldValue, setSlugFieldValue] = (0, import_ui.useFormFields)(([fields]) => {
     return fields["slug"]?.value;
   });
-  const uriFieldValue = (0, import_ui.useFormFields)(([fields]) => {
+  const [uriFieldValue, setUriFieldValue] = (0, import_ui.useFormFields)(([fields]) => {
     return fields["uri"]?.value;
   });
   if (!id) {
@@ -149,21 +149,61 @@ var SlugComponent = ({
 
 // src/payload/custom/uriField/component.tsx
 var import_ui3 = require("@payloadcms/ui");
+var import_react2 = require("react");
 var import_jsx_runtime3 = require("react/jsx-runtime");
 var UriComponent = ({ path, field }) => {
   const { value, setValue } = (0, import_ui3.useField)({ path: path || field.name });
   const { label } = field;
+  const [copied, setCopied] = (0, import_react2.useState)(false);
+  const handleCopyToClipboard = () => {
+    if (value) {
+      navigator.clipboard.writeText(value).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2e3);
+      });
+    }
+  };
   return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "field-type uri-field-component", children: [
     /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { className: "label-wrapper", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_ui3.FieldLabel, { htmlFor: `field-${path}`, label }) }),
-    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-      import_ui3.TextInput,
+    /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
+      "div",
       {
-        value,
-        onChange: setValue,
-        path: path || field.name,
-        readOnly: true
+        className: "input-wrapper",
+        style: { display: "flex", alignItems: "center", gap: "8px" },
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+            import_ui3.TextInput,
+            {
+              id: `field-${path}`,
+              value,
+              onChange: setValue,
+              path: path || field.name,
+              readOnly: true,
+              "aria-readonly": "true",
+              style: { flex: "1" }
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+            "button",
+            {
+              type: "button",
+              onClick: handleCopyToClipboard,
+              title: "Copy to clipboard",
+              className: "copy-button",
+              style: {
+                padding: "8px",
+                backgroundColor: "#ddd",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer"
+              },
+              children: "\u{1F4CB}"
+            }
+          )
+        ]
       }
-    )
+    ),
+    copied && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("small", { style: { color: "green" }, children: "Copied to clipboard!" })
   ] });
 };
 
