@@ -3,11 +3,11 @@ import { textField } from "@/payload/fields";
 
 const beforeValidateHook: FieldHook = async ({
   data, // incoming data to update or create with
-  req, // full express request
-  originalDoc, // original document
 }) => {
-  const breadcrumbs = (data?.breadcrumbs || []).reverse();
-
+  const breadcrumbs = Array.isArray(data?.breadcrumbs)
+    ? [...data.breadcrumbs]
+    : [];
+  breadcrumbs.reverse();
   return breadcrumbs[0]?.url || "";
 };
 
