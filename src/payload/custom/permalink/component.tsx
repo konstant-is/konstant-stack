@@ -4,24 +4,21 @@ import { useDocumentInfo, useFormFields } from "@payloadcms/ui";
 import { UIFieldClientComponent } from "payload";
 import { getClientSideURL } from "@/utils/getUrl";
 
-type PermalinkFieldProps = {
-  fieldToUse: string;
-};
 export const PermalinkField: UIFieldClientComponent = () => {
   const serverURL = getClientSideURL();
 
   const { id, collectionSlug } = useDocumentInfo();
 
-  // The value of the field we're listening to for the slug
-  const targetFieldValue = useFormFields(([fields]) => {
+  // Subscribe to the slug and uri fields for reactive updates
+  const [slugFieldValue, setSlugFieldValue] = useFormFields(([fields]) => {
     return fields["slug"]?.value as string;
   });
 
-  const uriFieldValue = useFormFields(([fields]) => {
+  const [uriFieldValue, setUriFieldValue] = useFormFields(([fields]) => {
     return fields["uri"]?.value as string;
   });
 
-  // Only display permalink if document is published
+  // Only display permalink if the document has been saved and has an ID
   if (!id) {
     return (
       <div className="permalinksField">
