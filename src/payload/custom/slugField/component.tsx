@@ -28,29 +28,29 @@ export const SlugComponent: React.FC<SlugComponentProps> = ({
 }) => {
   const { label } = field;
 
-  // Memoize checkboxFieldPath for performance
-  const checkboxFieldPath = useMemo(
-    () =>
-      path?.includes(".")
-        ? `${path}.${checkboxFieldPathFromProps}`
-        : checkboxFieldPathFromProps,
-    [path, checkboxFieldPathFromProps],
-  );
+  // Safely compute checkboxFieldPath
+  const checkboxFieldPath = useMemo(() => {
+    if (!path) return checkboxFieldPathFromProps;
+    return path.includes(".")
+      ? `${path}.${checkboxFieldPathFromProps}`
+      : checkboxFieldPathFromProps;
+  }, [path, checkboxFieldPathFromProps]);
 
   const { value, setValue } = useField<string>({ path: path || field.name });
   const { dispatchFields } = useForm();
 
-  // Separate hooks for fields to minimize re-renders
+  // Safely access checkbox value
   const checkboxValue = useFormFields(
     useCallback(
-      ([fields]) => fields[checkboxFieldPath]?.value as boolean,
+      ([fields]) => fields?.[checkboxFieldPath]?.value as boolean,
       [checkboxFieldPath],
     ),
   );
 
+  // Safely access target field value
   const targetFieldValue = useFormFields(
     useCallback(
-      ([fields]) => fields[fieldToUse]?.value as string,
+      ([fields]) => fields?.[fieldToUse]?.value as string,
       [fieldToUse],
     ),
   );

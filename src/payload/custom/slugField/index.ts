@@ -1,34 +1,41 @@
 import { textField } from "@/payload/fields";
+import { deepMerge } from "@/utils";
 import { formatSlug } from "@/utils/string";
 import type { CheckboxField, Field, FieldHook, TextField } from "payload";
 
-export const formatSlugHook =
+const formatSlugHook =
   (fallback: string): FieldHook =>
   ({ data, operation, originalDoc, value }) => {
+    // If the value is already a string, format it
     if (typeof value === "string") {
       return formatSlug(value);
     }
 
-    if (operation === "create" || !data?.slug.value) {
-      const fallbackData = data?.[fallback] || data?.[fallback];
+    // Ensure safe access to `data.slug`
+    const slugValue = data?.slug ? data.slug.value : undefined;
 
-      if (fallbackData && typeof fallbackData === "string") {
+    // Handle create operation or when the slug value is missing
+    if (operation === "create" || !slugValue) {
+      const fallbackData = data?.[fallback];
+
+      if (typeof fallbackData === "string") {
         return formatSlug(fallbackData);
       }
     }
 
+    // Return the existing value if no changes are needed
     return value;
   };
-
-type Overrides = {
-  slugOverrides?: Partial<TextField>;
-  checkboxOverrides?: Partial<CheckboxField>;
+type Props = {
+  fieldToUse?: string;
+  overrides?: {
+    slugOverrides?: Partial<TextField>;
+    checkboxOverrides?: Partial<CheckboxField>;
+  };
 };
-
-type Slug = (fieldToUse?: string, overrides?: Overrides) => [Field, Field];
-
-export const slugField: Slug = (fieldToUse = "title", overrides = {}) => {
-  const { slugOverrides, checkboxOverrides } = overrides;
+export const slugField = (props: Props): [Field, Field] => {
+  const { fieldToUse = "title", overrides } = props || {};
+  const { slugOverrides, checkboxOverrides } = overrides || {};
 
   const checkBoxField: CheckboxField = {
     name: "slugLock",
@@ -38,21 +45,18 @@ export const slugField: Slug = (fieldToUse = "title", overrides = {}) => {
       hidden: true,
       position: "sidebar",
     },
-    ...checkboxOverrides,
   };
 
   const field = textField({
     name: "slug",
     label: "Slug",
     index: true,
-    ...(slugOverrides || {}),
     hooks: {
       // Kept this in for hook or API based updates
       beforeValidate: [formatSlugHook(fieldToUse)],
     },
     admin: {
       position: "sidebar",
-      ...(slugOverrides?.admin || {}),
       components: {
         Field: {
           path: "@konstant/stack/payload/components#SlugComponent",
@@ -65,5 +69,7 @@ export const slugField: Slug = (fieldToUse = "title", overrides = {}) => {
     },
   });
 
-  return [field, checkBoxField];
+  const fieldResult = deepMerge(field, slugOverrides);
+  const checkboxResult = deepMerge(checkBoxField, checkboxOverrides);
+  return [fieldResult, checkboxResult];
 };
