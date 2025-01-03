@@ -1,4 +1,4 @@
-import { sassPlugin, postcssModules } from "esbuild-sass-plugin";
+import { sassPlugin } from "esbuild-sass-plugin";
 import { defineConfig } from "tsup";
 
 export default defineConfig((options) => ({
@@ -18,14 +18,10 @@ export default defineConfig((options) => ({
   clean: true, // Clean output directory before building
   css: true, // Include CSS in the build
   external: ["react", "payload"],
+  injectCSS: true,
   esbuildPlugins: [
     sassPlugin({
       type: "css",
-      cssImports: true, // Automatically inject CSS into JS
-      transform: postcssModules({
-        // ...put here the options for the cssModules plugin
-        // see: https://github.com/madyankin/postcss-modules
-      }),
     }),
   ],
   esbuildOptions: (options) => {
