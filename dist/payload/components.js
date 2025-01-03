@@ -127,8 +127,9 @@ import { FieldLabel as FieldLabel2, TextInput as TextInput2, useField as useFiel
 import { useState } from "react";
 import { jsx as jsx3, jsxs as jsxs3 } from "react/jsx-runtime";
 var UriComponent = ({ path, field }) => {
-  const { value, setValue } = useField2({ path: path || field.name });
-  const { label } = field;
+  const safePath = path || field?.name;
+  const { value = "", setValue } = useField2({ path: safePath });
+  const label = field?.label || "URI";
   const [copied, setCopied] = useState(false);
   const handleCopyToClipboard = () => {
     if (value) {
@@ -138,9 +139,13 @@ var UriComponent = ({ path, field }) => {
       });
     }
   };
+  if (!safePath) {
+    console.error("UriComponent: Missing `path` or `field.name`");
+    return /* @__PURE__ */ jsx3("div", { children: "Error: Missing required path or field configuration." });
+  }
   return /* @__PURE__ */ jsxs3("div", { className: "field-type uri-field-component", children: [
     /* @__PURE__ */ jsxs3("div", { className: "label-wrapper", children: [
-      /* @__PURE__ */ jsx3(FieldLabel2, { htmlFor: `field-${path}`, label }),
+      /* @__PURE__ */ jsx3(FieldLabel2, { htmlFor: `field-${safePath}`, label }),
       /* @__PURE__ */ jsx3(
         Button2,
         {
@@ -156,7 +161,7 @@ var UriComponent = ({ path, field }) => {
       {
         value,
         onChange: setValue,
-        path: path || field.name,
+        path: safePath,
         readOnly: true,
         "aria-readonly": "true",
         style: { flex: "1" }

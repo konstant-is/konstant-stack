@@ -13,7 +13,13 @@ type SlugComponentProps = {
 } & TextFieldClientProps;
 declare const SlugComponent: React.FC<SlugComponentProps>;
 
-type UriFieldProps = {} & TextFieldClientProps;
+type UriFieldProps = {
+    path?: string;
+    field?: {
+        name: string;
+        label?: string;
+    };
+} & TextFieldClientProps;
 declare const UriComponent: ({ path, field }: UriFieldProps) => react_jsx_runtime.JSX.Element;
 
 type Props = {
