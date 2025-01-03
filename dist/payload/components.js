@@ -97,15 +97,22 @@ var SlugComponent = ({
     [readOnlyFromProps, checkboxValue]
   );
   return /* @__PURE__ */ jsxs2("div", { className: "field-type slug-field-component", children: [
+    /* @__PURE__ */ jsx2(FieldLabel, { htmlFor: `field-${path}`, label }),
     /* @__PURE__ */ jsxs2(
       "div",
       {
-        className: "label-wrapper",
-        style: {
-          display: "flex"
-        },
+        className: "input-wrapper",
+        style: { display: "flex", alignItems: "center", gap: "8px" },
         children: [
-          /* @__PURE__ */ jsx2(FieldLabel, { htmlFor: `field-${path}`, label }),
+          /* @__PURE__ */ jsx2(
+            TextInput,
+            {
+              value,
+              onChange: setValue,
+              path: path || field.name,
+              readOnly: Boolean(readOnly)
+            }
+          ),
           /* @__PURE__ */ jsx2(
             Button,
             {
@@ -117,15 +124,6 @@ var SlugComponent = ({
             }
           )
         ]
-      }
-    ),
-    /* @__PURE__ */ jsx2(
-      TextInput,
-      {
-        value,
-        onChange: setValue,
-        path: path || field.name,
-        readOnly: Boolean(readOnly)
       }
     )
   ] });
