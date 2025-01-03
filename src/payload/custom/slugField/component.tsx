@@ -86,18 +86,8 @@ export const SlugComponent: React.FC<SlugComponentProps> = ({
 
   return (
     <div className="field-type slug-field-component">
-      <FieldLabel htmlFor={`field-${path}`} label={label} />
-
-      <div
-        className="input-wrapper"
-        style={{ display: "flex", alignItems: "center", gap: "8px" }}
-      >
-        <TextInput
-          value={value}
-          onChange={setValue}
-          path={path || field.name}
-          readOnly={Boolean(readOnly)}
-        />
+      <div className="label-wrapper">
+        <FieldLabel htmlFor={`field-${path}`} label={label} />
         <Button
           className="lock-button"
           buttonStyle="none"
@@ -107,6 +97,13 @@ export const SlugComponent: React.FC<SlugComponentProps> = ({
           {checkboxValue ? "Unlock" : "Lock"}
         </Button>
       </div>
+
+      <TextInput
+        value={value}
+        onChange={setValue}
+        path={path || field.name}
+        readOnly={Boolean(readOnly)}
+      />
     </div>
   );
 };
