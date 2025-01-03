@@ -18,7 +18,7 @@ export default defineConfig((options) => ({
   clean: true, // Clean output directory before building
   css: true, // Include CSS in the build
   external: ["react", "payload"],
-  injectCSS: true,
+  // injectCSS: true,
   esbuildPlugins: [
     sassPlugin({
       type: "css",
