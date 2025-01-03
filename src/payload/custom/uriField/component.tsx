@@ -1,6 +1,6 @@
 "use client";
 
-import { FieldLabel, TextInput, useField, useForm } from "@payloadcms/ui";
+import { FieldLabel, TextInput, useField, Button } from "@payloadcms/ui";
 import { TextFieldClientProps } from "payload";
 import { useState } from "react";
 
@@ -26,38 +26,25 @@ export const UriComponent = ({ path, field }: UriFieldProps) => {
       {/* Label */}
       <div className="label-wrapper">
         <FieldLabel htmlFor={`field-${path}`} label={label} />
+        <Button
+          className="copy-button"
+          buttonStyle="none"
+          onClick={handleCopyToClipboard}
+        >
+          Copy
+        </Button>
       </div>
 
       {/* Text Input */}
-      <div
-        className="input-wrapper"
-        style={{ display: "flex", alignItems: "center", gap: "8px" }}
-      >
-        <TextInput
-          value={value}
-          onChange={setValue}
-          path={path || field.name}
-          readOnly={true}
-          aria-readonly="true"
-          style={{ flex: "1" }}
-        />
-        {/* Copy Button */}
-        <button
-          type="button"
-          onClick={handleCopyToClipboard}
-          title="Copy to clipboard"
-          className="copy-button"
-          style={{
-            padding: "8px",
-            backgroundColor: "#ddd",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-          }}
-        >
-          📋
-        </button>
-      </div>
+
+      <TextInput
+        value={value}
+        onChange={setValue}
+        path={path || field.name}
+        readOnly={true}
+        aria-readonly="true"
+        style={{ flex: "1" }}
+      />
 
       {/* Copy Feedback */}
       {copied && <small style={{ color: "green" }}>Copied to clipboard!</small>}
