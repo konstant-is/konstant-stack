@@ -1,8 +1,11 @@
-import { UIFieldClientComponent, TextFieldClientProps } from 'payload';
-import React from 'react';
 import * as react_jsx_runtime from 'react/jsx-runtime';
+import { UIFieldClientProps, TextFieldClientProps } from 'payload';
+import React from 'react';
 
-declare const PermalinkField: UIFieldClientComponent;
+type PermalinkProps = {
+    fieldToUse: string;
+} & UIFieldClientProps;
+declare const PermalinkField: ({ fieldToUse }: PermalinkProps) => react_jsx_runtime.JSX.Element;
 
 type SlugComponentProps = {
     fieldToUse: string;

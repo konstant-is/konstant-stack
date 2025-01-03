@@ -1,12 +1,22 @@
 import { Field } from "payload";
 
-export const permalinkField = (): Field => {
+type Props = {
+  fieldToUse?: string;
+};
+export const permalinkField = (props?: Props): Field => {
+  const { fieldToUse = "uri" } = props || {};
+
   return {
     name: "permalink",
     type: "ui",
     admin: {
       components: {
-        Field: "@konstant/stack/payload/components#PermalinkField",
+        Field: {
+          path: "@konstant/stack/payload/components#PermalinkField",
+          clientProps: {
+            fieldToUse,
+          },
+        },
       },
     },
   };

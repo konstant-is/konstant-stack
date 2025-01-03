@@ -39,6 +39,7 @@ __export(components_exports, {
 module.exports = __toCommonJS(components_exports);
 
 // src/payload/custom/permalink/component.tsx
+var import_react = require("react");
 var import_ui = require("@payloadcms/ui");
 
 // src/utils/getUrl.ts
@@ -58,28 +59,31 @@ var getClientSideURL = () => {
 
 // src/payload/custom/permalink/component.tsx
 var import_jsx_runtime = require("react/jsx-runtime");
-var PermalinkField = () => {
+var PermalinkField = ({ fieldToUse }) => {
   const serverURL = getClientSideURL();
-  const { id, collectionSlug } = (0, import_ui.useDocumentInfo)();
-  const [slugFieldValue, setSlugFieldValue] = (0, import_ui.useFormFields)(([fields]) => {
-    return fields["slug"]?.value;
+  const { id } = (0, import_ui.useDocumentInfo)();
+  const targetFieldValue = (0, import_ui.useFormFields)(([fields]) => {
+    return fields[fieldToUse]?.value;
   });
-  const [uriFieldValue, setUriFieldValue] = (0, import_ui.useFormFields)(([fields]) => {
-    return fields["uri"]?.value;
-  });
+  const permalink = (0, import_react.useMemo)(() => {
+    if (!targetFieldValue) return "";
+    return `${serverURL}${targetFieldValue}`;
+  }, [serverURL, targetFieldValue]);
   if (!id) {
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "permalinksField", children: "Save the document to generate a permalink." });
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "permalinksField", children: "Save the document to generate a permalink." });
   }
-  const permalink = `${serverURL}${uriFieldValue}`;
+  if (!fieldToUse) {
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "permalinksField", children: "Please provide a valid field name to generate the permalink." });
+  }
   return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "field-type permalinksField", children: [
     /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Permalink:" }),
     " ",
-    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", { href: permalink, target: "_blank", children: permalink })
+    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", { href: permalink, target: "_blank", rel: "noopener noreferrer", children: permalink })
   ] });
 };
 
 // src/payload/custom/slugField/component.tsx
-var import_react = require("react");
+var import_react2 = require("react");
 var import_ui2 = require("@payloadcms/ui");
 
 // src/utils/string.ts
@@ -99,26 +103,33 @@ var SlugComponent = ({
   readOnly: readOnlyFromProps
 }) => {
   const { label } = field;
-  const checkboxFieldPath = path?.includes(".") ? `${path}.${checkboxFieldPathFromProps}` : checkboxFieldPathFromProps;
+  const checkboxFieldPath = (0, import_react2.useMemo)(
+    () => path?.includes(".") ? `${path}.${checkboxFieldPathFromProps}` : checkboxFieldPathFromProps,
+    [path, checkboxFieldPathFromProps]
+  );
   const { value, setValue } = (0, import_ui2.useField)({ path: path || field.name });
   const { dispatchFields } = (0, import_ui2.useForm)();
-  const checkboxValue = (0, import_ui2.useFormFields)(([fields]) => {
-    return fields[checkboxFieldPath]?.value;
-  });
-  const targetFieldValue = (0, import_ui2.useFormFields)(([fields]) => {
-    return fields[fieldToUse]?.value;
-  });
-  (0, import_react.useEffect)(() => {
+  const checkboxValue = (0, import_ui2.useFormFields)(
+    (0, import_react2.useCallback)(
+      ([fields]) => fields[checkboxFieldPath]?.value,
+      [checkboxFieldPath]
+    )
+  );
+  const targetFieldValue = (0, import_ui2.useFormFields)(
+    (0, import_react2.useCallback)(
+      ([fields]) => fields[fieldToUse]?.value,
+      [fieldToUse]
+    )
+  );
+  (0, import_react2.useEffect)(() => {
     if (checkboxValue) {
-      if (targetFieldValue) {
-        const formattedSlug = formatSlug(targetFieldValue);
-        if (value !== formattedSlug) setValue(formattedSlug);
-      } else {
-        if (value !== "") setValue("");
+      const formattedSlug = targetFieldValue ? formatSlug(targetFieldValue) : "";
+      if (value !== formattedSlug) {
+        setValue(formattedSlug);
       }
     }
   }, [targetFieldValue, checkboxValue, setValue, value]);
-  const handleLock = (0, import_react.useCallback)(
+  const handleLock = (0, import_react2.useCallback)(
     (e) => {
       e.preventDefault();
       dispatchFields({
@@ -129,12 +140,33 @@ var SlugComponent = ({
     },
     [checkboxValue, checkboxFieldPath, dispatchFields]
   );
-  const readOnly = readOnlyFromProps || checkboxValue;
+  const readOnly = (0, import_react2.useMemo)(
+    () => readOnlyFromProps || checkboxValue,
+    [readOnlyFromProps, checkboxValue]
+  );
   return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "field-type slug-field-component", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "label-wrapper", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_ui2.FieldLabel, { htmlFor: `field-${path}`, label }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_ui2.Button, { className: "lock-button", buttonStyle: "none", onClick: handleLock, children: checkboxValue ? "Unlock" : "Lock" })
-    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
+      "div",
+      {
+        className: "label-wrapper",
+        style: {
+          display: "flex"
+        },
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_ui2.FieldLabel, { htmlFor: `field-${path}`, label }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+            import_ui2.Button,
+            {
+              className: "lock-button",
+              buttonStyle: "none",
+              onClick: handleLock,
+              "aria-pressed": checkboxValue,
+              children: checkboxValue ? "Unlock" : "Lock"
+            }
+          )
+        ]
+      }
+    ),
     /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
       import_ui2.TextInput,
       {
@@ -149,12 +181,12 @@ var SlugComponent = ({
 
 // src/payload/custom/uriField/component.tsx
 var import_ui3 = require("@payloadcms/ui");
-var import_react2 = require("react");
+var import_react3 = require("react");
 var import_jsx_runtime3 = require("react/jsx-runtime");
 var UriComponent = ({ path, field }) => {
   const { value, setValue } = (0, import_ui3.useField)({ path: path || field.name });
   const { label } = field;
-  const [copied, setCopied] = (0, import_react2.useState)(false);
+  const [copied, setCopied] = (0, import_react3.useState)(false);
   const handleCopyToClipboard = () => {
     if (value) {
       navigator.clipboard.writeText(value).then(() => {

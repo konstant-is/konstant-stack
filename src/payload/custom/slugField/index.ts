@@ -1,4 +1,4 @@
-import { textField } from "@/payload/fields/fields";
+import { textField } from "@/payload/fields";
 import { formatSlug } from "@/utils/string";
 import type { CheckboxField, Field, FieldHook, TextField } from "payload";
 
@@ -9,7 +9,7 @@ export const formatSlugHook =
       return formatSlug(value);
     }
 
-    if (operation === "create" || !data?.slug) {
+    if (operation === "create" || !data?.slug.value) {
       const fallbackData = data?.[fallback] || data?.[fallback];
 
       if (fallbackData && typeof fallbackData === "string") {

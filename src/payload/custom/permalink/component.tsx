@@ -1,42 +1,54 @@
 "use client";
 
+import { useMemo } from "react";
 import { useDocumentInfo, useFormFields } from "@payloadcms/ui";
-import { UIFieldClientComponent } from "payload";
+import { UIFieldClientProps } from "payload";
 import { getClientSideURL } from "@/utils/getUrl";
 
-export const PermalinkField: UIFieldClientComponent = () => {
+type PermalinkProps = {
+  fieldToUse: string;
+} & UIFieldClientProps;
+
+export const PermalinkField = ({ fieldToUse }: PermalinkProps) => {
   const serverURL = getClientSideURL();
 
-  const { id, collectionSlug } = useDocumentInfo();
+  const { id } = useDocumentInfo();
 
-  // Subscribe to the slug and uri fields for reactive updates
-  const [slugFieldValue, setSlugFieldValue] = useFormFields(([fields]) => {
-    return fields["slug"]?.value as string;
+  // Listen to the field value
+  const targetFieldValue = useFormFields(([fields]) => {
+    return fields[fieldToUse]?.value as string;
   });
 
-  const [uriFieldValue, setUriFieldValue] = useFormFields(([fields]) => {
-    return fields["uri"]?.value as string;
-  });
+  // Compute permalink only when necessary
+  const permalink = useMemo(() => {
+    if (!targetFieldValue) return "";
+    return `${serverURL}${targetFieldValue}`;
+  }, [serverURL, targetFieldValue]);
 
-  // Only display permalink if the document has been saved and has an ID
+  // Display message if the document hasn't been saved
   if (!id) {
     return (
-      <div className="permalinksField">
+      <p className="permalinksField">
         Save the document to generate a permalink.
-      </div>
+      </p>
     );
   }
 
-  const permalink = `${serverURL}${uriFieldValue}`;
+  // Handle cases where `fieldToUse` is invalid or missing
+  if (!fieldToUse) {
+    return (
+      <p className="permalinksField">
+        Please provide a valid field name to generate the permalink.
+      </p>
+    );
+  }
 
   return (
     <div className="field-type permalinksField">
       <strong>Permalink:</strong>{" "}
-      <a href={permalink} target="_blank">
+      <a href={permalink} target="_blank" rel="noopener noreferrer">
         {permalink}
       </a>
     </div>
   );
 };
-
-export default PermalinkField;

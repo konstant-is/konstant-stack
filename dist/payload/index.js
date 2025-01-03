@@ -7,13 +7,19 @@ import {
 } from "../chunk-3I3J54W3.js";
 
 // src/payload/custom/permalink/index.ts
-var permalinkField = () => {
+var permalinkField = (props) => {
+  const { fieldToUse = "uri" } = props || {};
   return {
     name: "permalink",
     type: "ui",
     admin: {
       components: {
-        Field: "@konstant/stack/payload/components#PermalinkField"
+        Field: {
+          path: "@konstant/stack/payload/components#PermalinkField",
+          clientProps: {
+            fieldToUse
+          }
+        }
       }
     }
   };
@@ -278,7 +284,7 @@ var formatSlugHook = (fallback) => ({ data, operation, originalDoc, value }) => 
   if (typeof value === "string") {
     return formatSlug(value);
   }
-  if (operation === "create" || !data?.slug) {
+  if (operation === "create" || !data?.slug.value) {
     const fallbackData = data?.[fallback] || data?.[fallback];
     if (fallbackData && typeof fallbackData === "string") {
       return formatSlug(fallbackData);

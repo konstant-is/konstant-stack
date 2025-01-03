@@ -1,7 +1,10 @@
 import * as payload from 'payload';
 import { Field, FieldHook, TextField, CheckboxField, Block, CollectionConfig, GlobalConfig, TextareaField, NumberField, RichTextField, SelectField, TabsField, Tab, BlocksField, UploadField, GroupField, RowField, RadioField, RelationshipField, ArrayField, DateField, CollapsibleField, PointField, EmailField, JSONField, UIField, Config } from 'payload';
 
-declare const permalinkField: () => Field;
+type Props = {
+    fieldToUse?: string;
+};
+declare const permalinkField: (props?: Props) => Field;
 
 declare const arrayRowLabelField: (props: {
     prefix: string;

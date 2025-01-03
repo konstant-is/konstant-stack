@@ -10,30 +10,34 @@ import {
 } from "../chunk-3I3J54W3.js";
 
 // src/payload/custom/permalink/component.tsx
+import { useMemo } from "react";
 import { useDocumentInfo, useFormFields } from "@payloadcms/ui";
 import { jsx, jsxs } from "react/jsx-runtime";
-var PermalinkField = () => {
+var PermalinkField = ({ fieldToUse }) => {
   const serverURL = getClientSideURL();
-  const { id, collectionSlug } = useDocumentInfo();
-  const [slugFieldValue, setSlugFieldValue] = useFormFields(([fields]) => {
-    return fields["slug"]?.value;
+  const { id } = useDocumentInfo();
+  const targetFieldValue = useFormFields(([fields]) => {
+    return fields[fieldToUse]?.value;
   });
-  const [uriFieldValue, setUriFieldValue] = useFormFields(([fields]) => {
-    return fields["uri"]?.value;
-  });
+  const permalink = useMemo(() => {
+    if (!targetFieldValue) return "";
+    return `${serverURL}${targetFieldValue}`;
+  }, [serverURL, targetFieldValue]);
   if (!id) {
-    return /* @__PURE__ */ jsx("div", { className: "permalinksField", children: "Save the document to generate a permalink." });
+    return /* @__PURE__ */ jsx("p", { className: "permalinksField", children: "Save the document to generate a permalink." });
   }
-  const permalink = `${serverURL}${uriFieldValue}`;
+  if (!fieldToUse) {
+    return /* @__PURE__ */ jsx("p", { className: "permalinksField", children: "Please provide a valid field name to generate the permalink." });
+  }
   return /* @__PURE__ */ jsxs("div", { className: "field-type permalinksField", children: [
     /* @__PURE__ */ jsx("strong", { children: "Permalink:" }),
     " ",
-    /* @__PURE__ */ jsx("a", { href: permalink, target: "_blank", children: permalink })
+    /* @__PURE__ */ jsx("a", { href: permalink, target: "_blank", rel: "noopener noreferrer", children: permalink })
   ] });
 };
 
 // src/payload/custom/slugField/component.tsx
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo as useMemo2 } from "react";
 import {
   Button,
   FieldLabel,
@@ -51,22 +55,29 @@ var SlugComponent = ({
   readOnly: readOnlyFromProps
 }) => {
   const { label } = field;
-  const checkboxFieldPath = path?.includes(".") ? `${path}.${checkboxFieldPathFromProps}` : checkboxFieldPathFromProps;
+  const checkboxFieldPath = useMemo2(
+    () => path?.includes(".") ? `${path}.${checkboxFieldPathFromProps}` : checkboxFieldPathFromProps,
+    [path, checkboxFieldPathFromProps]
+  );
   const { value, setValue } = useField({ path: path || field.name });
   const { dispatchFields } = useForm();
-  const checkboxValue = useFormFields2(([fields]) => {
-    return fields[checkboxFieldPath]?.value;
-  });
-  const targetFieldValue = useFormFields2(([fields]) => {
-    return fields[fieldToUse]?.value;
-  });
+  const checkboxValue = useFormFields2(
+    useCallback(
+      ([fields]) => fields[checkboxFieldPath]?.value,
+      [checkboxFieldPath]
+    )
+  );
+  const targetFieldValue = useFormFields2(
+    useCallback(
+      ([fields]) => fields[fieldToUse]?.value,
+      [fieldToUse]
+    )
+  );
   useEffect(() => {
     if (checkboxValue) {
-      if (targetFieldValue) {
-        const formattedSlug = formatSlug(targetFieldValue);
-        if (value !== formattedSlug) setValue(formattedSlug);
-      } else {
-        if (value !== "") setValue("");
+      const formattedSlug = targetFieldValue ? formatSlug(targetFieldValue) : "";
+      if (value !== formattedSlug) {
+        setValue(formattedSlug);
       }
     }
   }, [targetFieldValue, checkboxValue, setValue, value]);
@@ -81,12 +92,33 @@ var SlugComponent = ({
     },
     [checkboxValue, checkboxFieldPath, dispatchFields]
   );
-  const readOnly = readOnlyFromProps || checkboxValue;
+  const readOnly = useMemo2(
+    () => readOnlyFromProps || checkboxValue,
+    [readOnlyFromProps, checkboxValue]
+  );
   return /* @__PURE__ */ jsxs2("div", { className: "field-type slug-field-component", children: [
-    /* @__PURE__ */ jsxs2("div", { className: "label-wrapper", children: [
-      /* @__PURE__ */ jsx2(FieldLabel, { htmlFor: `field-${path}`, label }),
-      /* @__PURE__ */ jsx2(Button, { className: "lock-button", buttonStyle: "none", onClick: handleLock, children: checkboxValue ? "Unlock" : "Lock" })
-    ] }),
+    /* @__PURE__ */ jsxs2(
+      "div",
+      {
+        className: "label-wrapper",
+        style: {
+          display: "flex"
+        },
+        children: [
+          /* @__PURE__ */ jsx2(FieldLabel, { htmlFor: `field-${path}`, label }),
+          /* @__PURE__ */ jsx2(
+            Button,
+            {
+              className: "lock-button",
+              buttonStyle: "none",
+              onClick: handleLock,
+              "aria-pressed": checkboxValue,
+              children: checkboxValue ? "Unlock" : "Lock"
+            }
+          )
+        ]
+      }
+    ),
     /* @__PURE__ */ jsx2(
       TextInput,
       {
