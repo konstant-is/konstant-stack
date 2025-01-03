@@ -40,6 +40,7 @@
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
     "esbuild-sass-plugin": "^3.3.1",
+    "eslint": "latest",
     "husky": "^9.1.7",
     "prettier": "^3.4.2",
     "sass": "^1.83.0",
