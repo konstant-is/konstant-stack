@@ -145,33 +145,26 @@ var SlugComponent = ({
     [readOnlyFromProps, checkboxValue]
   );
   return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "field-type slug-field-component", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_ui2.FieldLabel, { htmlFor: `field-${path}`, label }),
-    /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
-      "div",
+    /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "label-wrapper", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_ui2.FieldLabel, { htmlFor: `field-${path}`, label }),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+        import_ui2.Button,
+        {
+          className: "lock-button",
+          buttonStyle: "none",
+          onClick: handleLock,
+          "aria-pressed": checkboxValue,
+          children: checkboxValue ? "Unlock" : "Lock"
+        }
+      )
+    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+      import_ui2.TextInput,
       {
-        className: "input-wrapper",
-        style: { display: "flex", alignItems: "center", gap: "8px" },
-        children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-            import_ui2.TextInput,
-            {
-              value,
-              onChange: setValue,
-              path: path || field.name,
-              readOnly: Boolean(readOnly)
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-            import_ui2.Button,
-            {
-              className: "lock-button",
-              buttonStyle: "none",
-              onClick: handleLock,
-              "aria-pressed": checkboxValue,
-              children: checkboxValue ? "Unlock" : "Lock"
-            }
-          )
-        ]
+        value,
+        onChange: setValue,
+        path: path || field.name,
+        readOnly: Boolean(readOnly)
       }
     )
   ] });

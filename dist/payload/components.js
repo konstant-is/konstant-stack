@@ -97,33 +97,26 @@ var SlugComponent = ({
     [readOnlyFromProps, checkboxValue]
   );
   return /* @__PURE__ */ jsxs2("div", { className: "field-type slug-field-component", children: [
-    /* @__PURE__ */ jsx2(FieldLabel, { htmlFor: `field-${path}`, label }),
-    /* @__PURE__ */ jsxs2(
-      "div",
+    /* @__PURE__ */ jsxs2("div", { className: "label-wrapper", children: [
+      /* @__PURE__ */ jsx2(FieldLabel, { htmlFor: `field-${path}`, label }),
+      /* @__PURE__ */ jsx2(
+        Button,
+        {
+          className: "lock-button",
+          buttonStyle: "none",
+          onClick: handleLock,
+          "aria-pressed": checkboxValue,
+          children: checkboxValue ? "Unlock" : "Lock"
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsx2(
+      TextInput,
       {
-        className: "input-wrapper",
-        style: { display: "flex", alignItems: "center", gap: "8px" },
-        children: [
-          /* @__PURE__ */ jsx2(
-            TextInput,
-            {
-              value,
-              onChange: setValue,
-              path: path || field.name,
-              readOnly: Boolean(readOnly)
-            }
-          ),
-          /* @__PURE__ */ jsx2(
-            Button,
-            {
-              className: "lock-button",
-              buttonStyle: "none",
-              onClick: handleLock,
-              "aria-pressed": checkboxValue,
-              children: checkboxValue ? "Unlock" : "Lock"
-            }
-          )
-        ]
+        value,
+        onChange: setValue,
+        path: path || field.name,
+        readOnly: Boolean(readOnly)
       }
     )
   ] });
