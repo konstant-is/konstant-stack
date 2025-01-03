@@ -187,42 +187,27 @@ var UriComponent = ({ path, field }) => {
     }
   };
   return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "field-type uri-field-component", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { className: "label-wrapper", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_ui3.FieldLabel, { htmlFor: `field-${path}`, label }) }),
-    /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
-      "div",
+    /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "label-wrapper", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_ui3.FieldLabel, { htmlFor: `field-${path}`, label }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+        import_ui3.Button,
+        {
+          className: "copy-button",
+          buttonStyle: "none",
+          onClick: handleCopyToClipboard,
+          children: "Copy"
+        }
+      )
+    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+      import_ui3.TextInput,
       {
-        className: "input-wrapper",
-        style: { display: "flex", alignItems: "center", gap: "8px" },
-        children: [
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-            import_ui3.TextInput,
-            {
-              value,
-              onChange: setValue,
-              path: path || field.name,
-              readOnly: true,
-              "aria-readonly": "true",
-              style: { flex: "1" }
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-            "button",
-            {
-              type: "button",
-              onClick: handleCopyToClipboard,
-              title: "Copy to clipboard",
-              className: "copy-button",
-              style: {
-                padding: "8px",
-                backgroundColor: "#ddd",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer"
-              },
-              children: "\u{1F4CB}"
-            }
-          )
-        ]
+        value,
+        onChange: setValue,
+        path: path || field.name,
+        readOnly: true,
+        "aria-readonly": "true",
+        style: { flex: "1" }
       }
     ),
     copied && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("small", { style: { color: "green" }, children: "Copied to clipboard!" })
