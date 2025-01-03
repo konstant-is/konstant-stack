@@ -103,21 +103,21 @@ var SlugComponent = ({
   readOnly: readOnlyFromProps
 }) => {
   const { label } = field;
-  const checkboxFieldPath = (0, import_react2.useMemo)(
-    () => path?.includes(".") ? `${path}.${checkboxFieldPathFromProps}` : checkboxFieldPathFromProps,
-    [path, checkboxFieldPathFromProps]
-  );
+  const checkboxFieldPath = (0, import_react2.useMemo)(() => {
+    if (!path) return checkboxFieldPathFromProps;
+    return path.includes(".") ? `${path}.${checkboxFieldPathFromProps}` : checkboxFieldPathFromProps;
+  }, [path, checkboxFieldPathFromProps]);
   const { value, setValue } = (0, import_ui2.useField)({ path: path || field.name });
   const { dispatchFields } = (0, import_ui2.useForm)();
   const checkboxValue = (0, import_ui2.useFormFields)(
     (0, import_react2.useCallback)(
-      ([fields]) => fields[checkboxFieldPath]?.value,
+      ([fields]) => fields?.[checkboxFieldPath]?.value,
       [checkboxFieldPath]
     )
   );
   const targetFieldValue = (0, import_ui2.useFormFields)(
     (0, import_react2.useCallback)(
-      ([fields]) => fields[fieldToUse]?.value,
+      ([fields]) => fields?.[fieldToUse]?.value,
       [fieldToUse]
     )
   );

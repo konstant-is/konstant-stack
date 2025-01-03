@@ -1,3 +1,6 @@
+import "../chunk-IM23AUGN.js";
+import "../chunk-H25YBAVB.js";
+import "../chunk-7WMKQBU4.js";
 import {
   deepMerge
 } from "../chunk-Y4FC33LH.js";
@@ -284,16 +287,18 @@ var formatSlugHook = (fallback) => ({ data, operation, originalDoc, value }) => 
   if (typeof value === "string") {
     return formatSlug(value);
   }
-  if (operation === "create" || !data?.slug.value) {
-    const fallbackData = data?.[fallback] || data?.[fallback];
-    if (fallbackData && typeof fallbackData === "string") {
+  const slugValue = data?.slug ? data.slug.value : void 0;
+  if (operation === "create" || !slugValue) {
+    const fallbackData = data?.[fallback];
+    if (typeof fallbackData === "string") {
       return formatSlug(fallbackData);
     }
   }
   return value;
 };
-var slugField = (fieldToUse = "title", overrides = {}) => {
-  const { slugOverrides, checkboxOverrides } = overrides;
+var slugField = (props) => {
+  const { fieldToUse = "title", overrides } = props || {};
+  const { slugOverrides, checkboxOverrides } = overrides || {};
   const checkBoxField = {
     name: "slugLock",
     type: "checkbox",
@@ -301,21 +306,18 @@ var slugField = (fieldToUse = "title", overrides = {}) => {
     admin: {
       hidden: true,
       position: "sidebar"
-    },
-    ...checkboxOverrides
+    }
   };
   const field2 = textField({
     name: "slug",
     label: "Slug",
     index: true,
-    ...slugOverrides || {},
     hooks: {
       // Kept this in for hook or API based updates
       beforeValidate: [formatSlugHook(fieldToUse)]
     },
     admin: {
       position: "sidebar",
-      ...slugOverrides?.admin || {},
       components: {
         Field: {
           path: "@konstant/stack/payload/components#SlugComponent",
@@ -327,7 +329,9 @@ var slugField = (fieldToUse = "title", overrides = {}) => {
       }
     }
   });
-  return [field2, checkBoxField];
+  const fieldResult = deepMerge(field2, slugOverrides);
+  const checkboxResult = deepMerge(checkBoxField, checkboxOverrides);
+  return [fieldResult, checkboxResult];
 };
 
 // src/payload/custom/uriField/index.ts
@@ -854,7 +858,6 @@ export {
   emailField,
   externalLinkField,
   field,
-  formatSlugHook,
   groupField,
   internalLinkField,
   jsonField,

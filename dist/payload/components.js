@@ -55,21 +55,21 @@ var SlugComponent = ({
   readOnly: readOnlyFromProps
 }) => {
   const { label } = field;
-  const checkboxFieldPath = useMemo2(
-    () => path?.includes(".") ? `${path}.${checkboxFieldPathFromProps}` : checkboxFieldPathFromProps,
-    [path, checkboxFieldPathFromProps]
-  );
+  const checkboxFieldPath = useMemo2(() => {
+    if (!path) return checkboxFieldPathFromProps;
+    return path.includes(".") ? `${path}.${checkboxFieldPathFromProps}` : checkboxFieldPathFromProps;
+  }, [path, checkboxFieldPathFromProps]);
   const { value, setValue } = useField({ path: path || field.name });
   const { dispatchFields } = useForm();
   const checkboxValue = useFormFields2(
     useCallback(
-      ([fields]) => fields[checkboxFieldPath]?.value,
+      ([fields]) => fields?.[checkboxFieldPath]?.value,
       [checkboxFieldPath]
     )
   );
   const targetFieldValue = useFormFields2(
     useCallback(
-      ([fields]) => fields[fieldToUse]?.value,
+      ([fields]) => fields?.[fieldToUse]?.value,
       [fieldToUse]
     )
   );

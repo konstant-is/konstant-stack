@@ -1,10 +1,10 @@
 import * as payload from 'payload';
-import { Field, FieldHook, TextField, CheckboxField, Block, CollectionConfig, GlobalConfig, TextareaField, NumberField, RichTextField, SelectField, TabsField, Tab, BlocksField, UploadField, GroupField, RowField, RadioField, RelationshipField, ArrayField, DateField, CollapsibleField, PointField, EmailField, JSONField, UIField, Config } from 'payload';
+import { Field, TextField, CheckboxField, Block, CollectionConfig, GlobalConfig, TextareaField, NumberField, RichTextField, SelectField, TabsField, Tab, BlocksField, UploadField, GroupField, RowField, RadioField, RelationshipField, ArrayField, DateField, CollapsibleField, PointField, EmailField, JSONField, UIField, Config } from 'payload';
 
-type Props = {
+type Props$1 = {
     fieldToUse?: string;
 };
-declare const permalinkField: (props?: Props) => Field;
+declare const permalinkField: (props?: Props$1) => Field;
 
 declare const arrayRowLabelField: (props: {
     prefix: string;
@@ -17,13 +17,14 @@ declare const arrayRowLabelField: (props: {
     };
 };
 
-declare const formatSlugHook: (fallback: string) => FieldHook;
-type Overrides = {
-    slugOverrides?: Partial<TextField>;
-    checkboxOverrides?: Partial<CheckboxField>;
+type Props = {
+    fieldToUse?: string;
+    overrides?: {
+        slugOverrides?: Partial<TextField>;
+        checkboxOverrides?: Partial<CheckboxField>;
+    };
 };
-type Slug = (fieldToUse?: string, overrides?: Overrides) => [Field, Field];
-declare const slugField: Slug;
+declare const slugField: (props: Props) => [Field, Field];
 
 declare const uriField: () => payload.Field;
 
@@ -167,4 +168,4 @@ declare const uiField: (props: Omit<UIField, "type">) => Field;
 
 declare const konstantFieldsPlugin: (config: Config) => Config;
 
-export { type CreateFieldProps, addressField, arrayField, arrayRowLabelField, blockBuilder, blockBuilderHelper, blocksField, checkboxField, collapsibleField, createBlock, createCollectionConfig, createField, createGlobalConfig, dateField, emailField, externalLinkField, field, formatSlugHook, groupField, internalLinkField, jsonField, konstantFieldsPlugin, linkField, numberField, openingHoursField, permalinkField, pointField, radioField, relationshipField, richTextField, rowField, selectField, slugField, socialsField, tabField, tabsField, textField, textareaField, timeField, uiField, uploadField, uriField, urlField, weekdaysMap };
+export { type CreateFieldProps, addressField, arrayField, arrayRowLabelField, blockBuilder, blockBuilderHelper, blocksField, checkboxField, collapsibleField, createBlock, createCollectionConfig, createField, createGlobalConfig, dateField, emailField, externalLinkField, field, groupField, internalLinkField, jsonField, konstantFieldsPlugin, linkField, numberField, openingHoursField, permalinkField, pointField, radioField, relationshipField, richTextField, rowField, selectField, slugField, socialsField, tabField, tabsField, textField, textareaField, timeField, uiField, uploadField, uriField, urlField, weekdaysMap };

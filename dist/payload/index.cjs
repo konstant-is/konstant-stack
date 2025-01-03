@@ -46,7 +46,6 @@ __export(payload_exports, {
   emailField: () => emailField,
   externalLinkField: () => externalLinkField,
   field: () => field,
-  formatSlugHook: () => formatSlugHook,
   groupField: () => groupField,
   internalLinkField: () => internalLinkField,
   jsonField: () => jsonField,
@@ -362,21 +361,52 @@ var formatSlug = (value = "") => (0, import_slugify.default)(value, {
   trim: true
 });
 
+// src/utils/date.ts
+var import_date_fns = require("date-fns");
+var import_locale = require("date-fns/locale");
+
+// src/utils/getUrl.ts
+var import_canUseDOM = require("@payloadcms/ui/utilities/canUseDOM");
+
+// src/utils/object.ts
+function isObject(item) {
+  return item && typeof item === "object" && !Array.isArray(item);
+}
+function deepMerge(target, source) {
+  const output = { ...target };
+  if (isObject(target) && isObject(source)) {
+    Object.keys(source).forEach((key) => {
+      if (isObject(source[key])) {
+        if (!(key in target)) {
+          Object.assign(output, { [key]: source[key] });
+        } else {
+          output[key] = deepMerge(target[key], source[key]);
+        }
+      } else {
+        Object.assign(output, { [key]: source[key] });
+      }
+    });
+  }
+  return output;
+}
+
 // src/payload/custom/slugField/index.ts
 var formatSlugHook = (fallback) => ({ data, operation, originalDoc, value }) => {
   if (typeof value === "string") {
     return formatSlug(value);
   }
-  if (operation === "create" || !data?.slug.value) {
-    const fallbackData = data?.[fallback] || data?.[fallback];
-    if (fallbackData && typeof fallbackData === "string") {
+  const slugValue = data?.slug ? data.slug.value : void 0;
+  if (operation === "create" || !slugValue) {
+    const fallbackData = data?.[fallback];
+    if (typeof fallbackData === "string") {
       return formatSlug(fallbackData);
     }
   }
   return value;
 };
-var slugField = (fieldToUse = "title", overrides = {}) => {
-  const { slugOverrides, checkboxOverrides } = overrides;
+var slugField = (props) => {
+  const { fieldToUse = "title", overrides } = props || {};
+  const { slugOverrides, checkboxOverrides } = overrides || {};
   const checkBoxField = {
     name: "slugLock",
     type: "checkbox",
@@ -384,21 +414,18 @@ var slugField = (fieldToUse = "title", overrides = {}) => {
     admin: {
       hidden: true,
       position: "sidebar"
-    },
-    ...checkboxOverrides
+    }
   };
   const field2 = textField({
     name: "slug",
     label: "Slug",
     index: true,
-    ...slugOverrides || {},
     hooks: {
       // Kept this in for hook or API based updates
       beforeValidate: [formatSlugHook(fieldToUse)]
     },
     admin: {
       position: "sidebar",
-      ...slugOverrides?.admin || {},
       components: {
         Field: {
           path: "@konstant/stack/payload/components#SlugComponent",
@@ -410,7 +437,9 @@ var slugField = (fieldToUse = "title", overrides = {}) => {
       }
     }
   });
-  return [field2, checkBoxField];
+  const fieldResult = deepMerge(field2, slugOverrides);
+  const checkboxResult = deepMerge(checkBoxField, checkboxOverrides);
+  return [fieldResult, checkboxResult];
 };
 
 // src/payload/custom/uriField/index.ts
@@ -444,28 +473,6 @@ var uriField = () => {
     }
   });
 };
-
-// src/utils/object.ts
-function isObject(item) {
-  return item && typeof item === "object" && !Array.isArray(item);
-}
-function deepMerge(target, source) {
-  const output = { ...target };
-  if (isObject(target) && isObject(source)) {
-    Object.keys(source).forEach((key) => {
-      if (isObject(source[key])) {
-        if (!(key in target)) {
-          Object.assign(output, { [key]: source[key] });
-        } else {
-          output[key] = deepMerge(target[key], source[key]);
-        }
-      } else {
-        Object.assign(output, { [key]: source[key] });
-      }
-    });
-  }
-  return output;
-}
 
 // src/payload/utils/createField.ts
 function createField2(fieldFn) {
@@ -960,7 +967,6 @@ var konstantFieldsPlugin = (config) => {
   emailField,
   externalLinkField,
   field,
-  formatSlugHook,
   groupField,
   internalLinkField,
   jsonField,
