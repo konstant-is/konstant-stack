@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo } from "react";
-import "./slug.scss";
+import "./slug.module.scss";
 
 import {
   Button,

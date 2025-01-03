@@ -1,10 +1,10 @@
-/* src/payload/custom/slugField/slug.scss */
-.slug-field-component .label-wrapper {
+/* esbuild-sass-plugin:css-chunk:src/payload/custom/slugField/slug.module.scss */
+._slug-field-component_2gape_1 ._label-wrapper_2gape_1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.slug-field-component .lock-button {
+._slug-field-component_2gape_1 ._lock-button_2gape_6 {
   margin: 0;
   padding-bottom: 0.3125rem;
 }
