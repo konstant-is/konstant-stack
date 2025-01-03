@@ -103,29 +103,22 @@ var SlugComponent = ({
   readOnly: readOnlyFromProps
 }) => {
   const { label } = field;
-  const checkboxFieldPath = (0, import_react2.useMemo)(() => {
-    if (!path) return checkboxFieldPathFromProps;
-    return path.includes(".") ? `${path}.${checkboxFieldPathFromProps}` : checkboxFieldPathFromProps;
-  }, [path, checkboxFieldPathFromProps]);
+  const checkboxFieldPath = path?.includes(".") ? `${path}.${checkboxFieldPathFromProps}` : checkboxFieldPathFromProps;
   const { value, setValue } = (0, import_ui2.useField)({ path: path || field.name });
   const { dispatchFields } = (0, import_ui2.useForm)();
-  const checkboxValue = (0, import_ui2.useFormFields)(
-    (0, import_react2.useCallback)(
-      ([fields]) => fields?.[checkboxFieldPath]?.value,
-      [checkboxFieldPath]
-    )
-  );
-  const targetFieldValue = (0, import_ui2.useFormFields)(
-    (0, import_react2.useCallback)(
-      ([fields]) => fields?.[fieldToUse]?.value,
-      [fieldToUse]
-    )
-  );
+  const checkboxValue = (0, import_ui2.useFormFields)(([fields]) => {
+    return fields[checkboxFieldPath]?.value;
+  });
+  const targetFieldValue = (0, import_ui2.useFormFields)(([fields]) => {
+    return fields[fieldToUse]?.value;
+  });
   (0, import_react2.useEffect)(() => {
     if (checkboxValue) {
-      const formattedSlug = targetFieldValue ? formatSlug(targetFieldValue) : "";
-      if (value !== formattedSlug) {
-        setValue(formattedSlug);
+      if (targetFieldValue) {
+        const formattedSlug = formatSlug(targetFieldValue);
+        if (value !== formattedSlug) setValue(formattedSlug);
+      } else {
+        if (value !== "") setValue("");
       }
     }
   }, [targetFieldValue, checkboxValue, setValue, value]);
@@ -140,23 +133,11 @@ var SlugComponent = ({
     },
     [checkboxValue, checkboxFieldPath, dispatchFields]
   );
-  const readOnly = (0, import_react2.useMemo)(
-    () => readOnlyFromProps || checkboxValue,
-    [readOnlyFromProps, checkboxValue]
-  );
+  const readOnly = readOnlyFromProps || checkboxValue;
   return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "field-type slug-field-component", children: [
     /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "label-wrapper", children: [
       /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_ui2.FieldLabel, { htmlFor: `field-${path}`, label }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-        import_ui2.Button,
-        {
-          className: "lock-button",
-          buttonStyle: "none",
-          onClick: handleLock,
-          "aria-pressed": checkboxValue,
-          children: checkboxValue ? "Unlock" : "Lock"
-        }
-      )
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_ui2.Button, { className: "lock-button", buttonStyle: "none", onClick: handleLock, children: checkboxValue ? "Unlock" : "Lock" })
     ] }),
     /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
       import_ui2.TextInput,
