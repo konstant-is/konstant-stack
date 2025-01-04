@@ -152,13 +152,12 @@ var SlugComponent = ({
 };
 
 // src/payload/custom/uriField/component.tsx
-var import_ui3 = require("@payloadcms/ui");
 var import_react3 = require("react");
+var import_ui3 = require("@payloadcms/ui");
 var import_jsx_runtime3 = require("react/jsx-runtime");
 var UriComponent = ({ path, field }) => {
-  const safePath = path || field?.name;
-  const { value = "", setValue } = (0, import_ui3.useField)({ path: safePath });
-  const label = field?.label || "URI";
+  const { label } = field;
+  const { value, setValue } = (0, import_ui3.useField)({ path: path || field.name });
   const [copied, setCopied] = (0, import_react3.useState)(false);
   const handleCopyToClipboard = () => {
     if (value) {
@@ -168,13 +167,9 @@ var UriComponent = ({ path, field }) => {
       });
     }
   };
-  if (!safePath) {
-    console.error("UriComponent: Missing `path` or `field.name`");
-    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { children: "Error: Missing required path or field configuration." });
-  }
   return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "field-type uri-field-component", children: [
     /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "label-wrapper", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_ui3.FieldLabel, { htmlFor: `field-${safePath}`, label }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_ui3.FieldLabel, { htmlFor: `field-${path}`, label }),
       /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
         import_ui3.Button,
         {
@@ -190,10 +185,8 @@ var UriComponent = ({ path, field }) => {
       {
         value,
         onChange: setValue,
-        path: safePath,
-        readOnly: true,
-        "aria-readonly": "true",
-        style: { flex: "1" }
+        path: path || field.name,
+        readOnly: true
       }
     ),
     copied && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("small", { style: { color: "green" }, children: "Copied to clipboard!" })

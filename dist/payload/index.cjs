@@ -443,23 +443,45 @@ var slugField = (props) => {
 };
 
 // src/payload/custom/uriField/index.ts
-var beforeValidateHook = async ({
-  data
-  // incoming data to update or create with
+var updateCollectionUriField = async ({
+  data,
+  operation,
+  originalDoc,
+  req
 }) => {
-  const breadcrumbs = Array.isArray(data?.breadcrumbs) ? [...data.breadcrumbs] : [];
-  breadcrumbs.reverse();
-  return breadcrumbs[0]?.url || "";
+  if (operation !== "create" && operation !== "update") return;
+  const collection = req.routeParams?.["collection"];
+  const id = originalDoc?.id;
+  if (!collection || !id) {
+    console.warn("Missing collection or document ID", { id, collection });
+    return;
+  }
+  const breadcrumbs = Array.isArray(data?.breadcrumbs) ? data.breadcrumbs : [];
+  const newUri = breadcrumbs.length > 0 ? breadcrumbs[breadcrumbs.length - 1].url || "" : "";
+  console.log("Computed URIs", { currentUri: data?.uri, newUri });
+  if (data?.uri === newUri) return;
+  try {
+    await req.payload.update({
+      collection,
+      where: { id },
+      data: {
+        ...data,
+        uri: newUri
+      }
+    });
+    console.info("URI updated successfully", { id, collection, newUri });
+  } catch (error) {
+    console.error("Failed to update URI field", { id, collection, error });
+  }
 };
 var uriField = () => {
   return textField({
     name: "uri",
     index: false,
     required: false,
-    hidden: false,
     localized: true,
     hooks: {
-      beforeValidate: [beforeValidateHook]
+      afterChange: [updateCollectionUriField]
     },
     unique: false,
     admin: {

@@ -104,13 +104,12 @@ var SlugComponent = ({
 };
 
 // src/payload/custom/uriField/component.tsx
-import { FieldLabel as FieldLabel2, TextInput as TextInput2, useField as useField2, Button as Button2 } from "@payloadcms/ui";
 import { useState } from "react";
+import { Button as Button2, FieldLabel as FieldLabel2, TextInput as TextInput2, useField as useField2 } from "@payloadcms/ui";
 import { jsx as jsx3, jsxs as jsxs3 } from "react/jsx-runtime";
 var UriComponent = ({ path, field }) => {
-  const safePath = path || field?.name;
-  const { value = "", setValue } = useField2({ path: safePath });
-  const label = field?.label || "URI";
+  const { label } = field;
+  const { value, setValue } = useField2({ path: path || field.name });
   const [copied, setCopied] = useState(false);
   const handleCopyToClipboard = () => {
     if (value) {
@@ -120,13 +119,9 @@ var UriComponent = ({ path, field }) => {
       });
     }
   };
-  if (!safePath) {
-    console.error("UriComponent: Missing `path` or `field.name`");
-    return /* @__PURE__ */ jsx3("div", { children: "Error: Missing required path or field configuration." });
-  }
   return /* @__PURE__ */ jsxs3("div", { className: "field-type uri-field-component", children: [
     /* @__PURE__ */ jsxs3("div", { className: "label-wrapper", children: [
-      /* @__PURE__ */ jsx3(FieldLabel2, { htmlFor: `field-${safePath}`, label }),
+      /* @__PURE__ */ jsx3(FieldLabel2, { htmlFor: `field-${path}`, label }),
       /* @__PURE__ */ jsx3(
         Button2,
         {
@@ -142,10 +137,8 @@ var UriComponent = ({ path, field }) => {
       {
         value,
         onChange: setValue,
-        path: safePath,
-        readOnly: true,
-        "aria-readonly": "true",
-        style: { flex: "1" }
+        path: path || field.name,
+        readOnly: true
       }
     ),
     copied && /* @__PURE__ */ jsx3("small", { style: { color: "green" }, children: "Copied to clipboard!" })
