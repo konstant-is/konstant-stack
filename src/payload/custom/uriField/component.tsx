@@ -1,18 +1,14 @@
 "use client";
 
-import { FieldLabel, TextInput, useField, Button } from "@payloadcms/ui";
+import React, { useState } from "react";
+import { Button, FieldLabel, TextInput, useField } from "@payloadcms/ui";
 import { TextFieldClientProps } from "payload";
-import { useState } from "react";
 
-type UriFieldProps = {
-  path?: string; // Make path optional
-  field?: { name: string; label?: string }; // Allow flexibility in field structure
-} & TextFieldClientProps;
+type UriFieldProps = {} & TextFieldClientProps;
 
-export const UriComponent = ({ path, field }: UriFieldProps) => {
-  const safePath = path || field?.name;
-  const { value = "", setValue } = useField<string>({ path: safePath });
-  const label = field?.label || "URI";
+export const UriComponent: React.FC<UriFieldProps> = ({ path, field }) => {
+  const { label } = field;
+  const { value, setValue } = useField<string>({ path: path || field.name });
 
   const [copied, setCopied] = useState(false);
 
@@ -25,17 +21,11 @@ export const UriComponent = ({ path, field }: UriFieldProps) => {
     }
   };
 
-  // Safeguard for missing path or field.name
-  if (!safePath) {
-    console.error("UriComponent: Missing `path` or `field.name`");
-    return <div>Error: Missing required path or field configuration.</div>;
-  }
-
   return (
     <div className="field-type uri-field-component">
       {/* Label */}
       <div className="label-wrapper">
-        <FieldLabel htmlFor={`field-${safePath}`} label={label} />
+        <FieldLabel htmlFor={`field-${path}`} label={label} />
         <Button
           className="copy-button"
           buttonStyle="none"
@@ -49,10 +39,8 @@ export const UriComponent = ({ path, field }: UriFieldProps) => {
       <TextInput
         value={value}
         onChange={setValue}
-        path={safePath}
+        path={path || field.name}
         readOnly={true}
-        aria-readonly="true"
-        style={{ flex: "1" }}
       />
 
       {/* Copy Feedback */}
