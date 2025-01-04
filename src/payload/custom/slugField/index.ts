@@ -33,7 +33,7 @@ type Props = {
     checkboxOverrides?: Partial<CheckboxField>;
   };
 };
-export const slugField = (props: Props): [Field, Field] => {
+export const slugField = (props?: Props): [Field, Field] => {
   const { fieldToUse = "title", overrides } = props || {};
   const { slugOverrides, checkboxOverrides } = overrides || {};
 
