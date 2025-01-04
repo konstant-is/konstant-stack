@@ -24,7 +24,7 @@ type Props = {
         checkboxOverrides?: Partial<CheckboxField>;
     };
 };
-declare const slugField: (props: Props) => [Field, Field];
+declare const slugField: (props?: Props) => [Field, Field];
 
 declare const uriField: () => payload.Field;
 
