@@ -1,3 +1,4 @@
+import qs from "qs";
 import slugify from "slugify";
 
 export const capitalize = (str: string = ""): string => {
@@ -13,3 +14,7 @@ export const formatSlug = (value: string = "") =>
     lower: true,
     trim: true,
   });
+
+export const createQueryString = (query: any): string => {
+  return qs.stringify(query, { addQueryPrefix: true });
+};

@@ -50,6 +50,7 @@ export const slugField = (props?: Props): [Field, Field] => {
   const field = textField({
     name: "slug",
     label: "Slug",
+    localized: true,
     index: true,
     hooks: {
       // Kept this in for hook or API based updates
