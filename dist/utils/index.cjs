@@ -33,6 +33,7 @@ __export(utils_exports, {
   canUseDom: () => canUseDom,
   capitalize: () => capitalize,
   createFieldOptions: () => createFieldOptions,
+  createQueryString: () => createQueryString,
   dateFormat: () => dateFormat,
   deepMerge: () => deepMerge,
   formatIso: () => formatIso,
@@ -53,6 +54,7 @@ module.exports = __toCommonJS(utils_exports);
 var canUseDom = () => !!(typeof window !== "undefined" && window.document && window.document.createElement);
 
 // src/utils/string.ts
+var import_qs = __toESM(require("qs"), 1);
 var import_slugify = __toESM(require("slugify"), 1);
 var capitalize = (str = "") => {
   if (!str.length) {
@@ -64,6 +66,9 @@ var formatSlug = (value = "") => (0, import_slugify.default)(value, {
   lower: true,
   trim: true
 });
+var createQueryString = (query) => {
+  return import_qs.default.stringify(query, { addQueryPrefix: true });
+};
 
 // src/utils/createFieldOptions.ts
 var createFieldOptions = (keys) => {
@@ -172,6 +177,7 @@ function deepMerge(target, source) {
   canUseDom,
   capitalize,
   createFieldOptions,
+  createQueryString,
   dateFormat,
   deepMerge,
   formatIso,

@@ -31,9 +31,11 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 var string_exports = {};
 __export(string_exports, {
   capitalize: () => capitalize,
+  createQueryString: () => createQueryString,
   formatSlug: () => formatSlug
 });
 module.exports = __toCommonJS(string_exports);
+var import_qs = __toESM(require("qs"), 1);
 var import_slugify = __toESM(require("slugify"), 1);
 var capitalize = (str = "") => {
   if (!str.length) {
@@ -45,9 +47,13 @@ var formatSlug = (value = "") => (0, import_slugify.default)(value, {
   lower: true,
   trim: true
 });
+var createQueryString = (query) => {
+  return import_qs.default.stringify(query, { addQueryPrefix: true });
+};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   capitalize,
+  createQueryString,
   formatSlug
 });
 //# sourceMappingURL=string.cjs.map

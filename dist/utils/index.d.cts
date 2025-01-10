@@ -1,6 +1,6 @@
 export { dateFormat, formatIso, isBetween, timeFormat, useDate } from './date.cjs';
 export { deepMerge, getNestedProperty, isObject } from './object.cjs';
-export { capitalize, formatSlug } from './string.cjs';
+export { capitalize, createQueryString, formatSlug } from './string.cjs';
 export { isDate } from 'date-fns';
 
 declare const canUseDom: () => boolean;

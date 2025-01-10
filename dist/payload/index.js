@@ -1,4 +1,4 @@
-import "../chunk-IM23AUGN.js";
+import "../chunk-NMT6RIEO.js";
 import "../chunk-H25YBAVB.js";
 import "../chunk-7WMKQBU4.js";
 import {
@@ -7,7 +7,7 @@ import {
 import {
   capitalize,
   formatSlug
-} from "../chunk-3I3J54W3.js";
+} from "../chunk-NUDE4V2R.js";
 
 // src/payload/custom/permalink/index.ts
 var permalinkField = (props) => {
@@ -311,6 +311,7 @@ var slugField = (props) => {
   const field2 = textField({
     name: "slug",
     label: "Slug",
+    localized: true,
     index: true,
     hooks: {
       // Kept this in for hook or API based updates

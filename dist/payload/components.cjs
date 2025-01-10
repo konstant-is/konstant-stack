@@ -87,6 +87,7 @@ var import_react2 = require("react");
 var import_ui2 = require("@payloadcms/ui");
 
 // src/utils/string.ts
+var import_qs = __toESM(require("qs"), 1);
 var import_slugify = __toESM(require("slugify"), 1);
 var formatSlug = (value = "") => (0, import_slugify.default)(value, {
   lower: true,

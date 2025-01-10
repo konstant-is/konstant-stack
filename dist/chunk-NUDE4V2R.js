@@ -1,4 +1,5 @@
 // src/utils/string.ts
+import qs from "qs";
 import slugify from "slugify";
 var capitalize = (str = "") => {
   if (!str.length) {
@@ -10,9 +11,13 @@ var formatSlug = (value = "") => slugify(value, {
   lower: true,
   trim: true
 });
+var createQueryString = (query) => {
+  return qs.stringify(query, { addQueryPrefix: true });
+};
 
 export {
   capitalize,
-  formatSlug
+  formatSlug,
+  createQueryString
 };
-//# sourceMappingURL=chunk-3I3J54W3.js.map
+//# sourceMappingURL=chunk-NUDE4V2R.js.map

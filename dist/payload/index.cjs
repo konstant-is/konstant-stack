@@ -349,6 +349,7 @@ var uiField = (props) => {
 };
 
 // src/utils/string.ts
+var import_qs = __toESM(require("qs"), 1);
 var import_slugify = __toESM(require("slugify"), 1);
 var capitalize = (str = "") => {
   if (!str.length) {
@@ -419,6 +420,7 @@ var slugField = (props) => {
   const field2 = textField({
     name: "slug",
     label: "Slug",
+    localized: true,
     index: true,
     hooks: {
       // Kept this in for hook or API based updates

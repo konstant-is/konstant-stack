@@ -1,6 +1,6 @@
 import {
   capitalize
-} from "./chunk-3I3J54W3.js";
+} from "./chunk-NUDE4V2R.js";
 
 // src/utils/canUseDom.ts
 var canUseDom = () => !!(typeof window !== "undefined" && window.document && window.document.createElement);
@@ -34,4 +34,4 @@ export {
   createFieldOptions,
   getReference
 };
-//# sourceMappingURL=chunk-IM23AUGN.js.map
+//# sourceMappingURL=chunk-NMT6RIEO.js.map

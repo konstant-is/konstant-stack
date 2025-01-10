@@ -7,7 +7,7 @@ import {
 } from "../chunk-Y4FC33LH.js";
 import {
   formatSlug
-} from "../chunk-3I3J54W3.js";
+} from "../chunk-NUDE4V2R.js";
 
 // src/payload/custom/permalink/component.tsx
 import { useMemo } from "react";
