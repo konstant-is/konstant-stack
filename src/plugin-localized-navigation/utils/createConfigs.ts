@@ -85,7 +85,7 @@ export const createConfigs = (
   const localizedUrlFieldConfig = createLocalizedUrlFieldConfig(
     localizedUrlField,
     {
-      fieldName: "Urls",
+      fieldName: "urls",
       sourceField: urlFieldConfig.fieldName,
       locales,
     },
