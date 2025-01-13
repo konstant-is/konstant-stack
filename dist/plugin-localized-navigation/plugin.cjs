@@ -79,6 +79,7 @@ var pluginConfig = {
   basePath: pluginPath,
   // Base path for the plugin
   paths: {
+    client: `${pluginPath}/client`,
     fields: `${pluginPath}/fields`
   },
   settings: {
@@ -105,10 +106,7 @@ var createPermalinkField = (config) => {
     admin: {
       components: {
         Field: {
-          path: pluginConfig.getPath(
-            "fields",
-            "/permalink/permalinkComponent#PermalinkComponent"
-          ),
+          path: pluginConfig.getPath("client", "#PermalinkComponent"),
           clientProps: {
             custom: {
               sourceField: config.sourceField
@@ -208,10 +206,7 @@ var createSlugField = (props) => {
       position: "sidebar",
       components: {
         Field: {
-          path: pluginConfig.getPath(
-            "fields",
-            "/slug/slugComponent#SlugComponent"
-          ),
+          path: pluginConfig.getPath("client", "#SlugComponent"),
           clientProps: {
             custom: {
               watchFields: useFields,
