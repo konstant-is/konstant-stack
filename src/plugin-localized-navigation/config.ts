@@ -1,6 +1,7 @@
 export type PluginConfig = {
   basePath: string;
   paths: {
+    client: string;
     fields: string;
   };
   settings: {
@@ -14,6 +15,7 @@ const pluginPath = "@konstant/stack/plugin-localized-navigation";
 export const pluginConfig: PluginConfig = {
   basePath: pluginPath, // Base path for the plugin
   paths: {
+    client: `${pluginPath}/client`,
     fields: `${pluginPath}/fields`,
   },
   settings: {

@@ -39,10 +39,7 @@ export const createSlugField = (props: Props): Field[] => {
       position: "sidebar",
       components: {
         Field: {
-          path: pluginConfig.getPath(
-            "fields",
-            "/slug/slugComponent#SlugComponent"
-          ),
+          path: pluginConfig.getPath("client", "#SlugComponent"),
 
           clientProps: {
             custom: {

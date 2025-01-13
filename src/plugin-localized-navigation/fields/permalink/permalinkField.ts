@@ -10,10 +10,7 @@ export const createPermalinkField = (config: PermalinkFieldConfig): Field => {
     admin: {
       components: {
         Field: {
-          path: pluginConfig.getPath(
-            "fields",
-            "/permalink/permalinkComponent#PermalinkComponent"
-          ),
+          path: pluginConfig.getPath("client", "#PermalinkComponent"),
 
           clientProps: {
             custom: {
