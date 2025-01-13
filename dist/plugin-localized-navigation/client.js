@@ -1,4 +1,4 @@
-"use component";
+"use client";
 import {
   getClientSideURL
 } from "../chunk-H25YBAVB.js";
