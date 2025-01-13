@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@payloadcms/ui": "3.14.0",
+    "@payloadcms/plugin-nested-docs": "3.14.0",
     "date-fns": "^3.6.0",
     "payload": "3.14.0",
     "qs": "^6.13.0",
