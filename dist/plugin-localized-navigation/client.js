@@ -1,7 +1,7 @@
 "use component";
 import {
   getClientSideURL
-} from "../../chunk-H25YBAVB.js";
+} from "../chunk-H25YBAVB.js";
 
 // src/plugin-localized-navigation/fields/permalink/permalinkComponent.tsx
 import { useMemo } from "react";
@@ -104,4 +104,4 @@ export {
   PermalinkComponent,
   SlugComponent
 };
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=client.js.map

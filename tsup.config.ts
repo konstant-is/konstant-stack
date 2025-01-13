@@ -10,7 +10,7 @@ export default defineConfig((options) => ({
     "src/payload/index.ts",
     "src/payload/components.ts",
     "src/plugin-localized-navigation/plugin.ts",
-    "src/plugin-localized-navigation/client/index.ts",
+    "src/plugin-localized-navigation/client.ts",
   ], // Main entry point
   outDir: "dist", // Output directory
   format: ["cjs", "esm"], // Build CommonJS and ESM formats

@@ -18,6 +18,7 @@
     "./payload": "./dist/payload/index.js",
     "./payload/components": "./dist/payload/components.js",
     "./plugin-localized-navigation": "./dist/plugin-localized-navigation/plugin.js",
+    "./plugin-localized-navigation-client": "./dist/plugin-localized-navigation/client.js",
     "./utils": "./dist/utils/index.js",
     "./utils/date": "./dist/utils/date.js",
     "./utils/string": "./dist/utils/string.js",

@@ -1,13 +1,13 @@
 "use client";
 import {
+  getClientSideURL
+} from "../chunk-H25YBAVB.js";
+import {
   getNestedProperty
 } from "../chunk-Y4FC33LH.js";
 import {
   formatSlug
 } from "../chunk-NUDE4V2R.js";
-import {
-  getClientSideURL
-} from "../chunk-H25YBAVB.js";
 
 // src/payload/custom/permalink/component.tsx
 import { useMemo } from "react";
