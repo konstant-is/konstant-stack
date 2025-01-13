@@ -396,7 +396,7 @@ var createConfigs = (pluginConfig2, locales) => {
   const localizedUrlFieldConfig = createLocalizedUrlFieldConfig(
     localizedUrlField,
     {
-      fieldName: "Urls",
+      fieldName: "urls",
       sourceField: urlFieldConfig.fieldName,
       locales
     }
