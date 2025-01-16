@@ -10,6 +10,7 @@ import {
 } from "../fields";
 import { createField } from "@/payload/utils/createField";
 import { timeField } from "./timeField";
+import { arrayRowLabelField } from "./rowLabel";
 
 export const weekdaysMap: Record<string, string> = {
   1: "Mondays",
@@ -30,6 +31,14 @@ export const openingHoursField = createField((props) => {
   const items = arrayField({
     name: "items",
     label: "Opening Hours",
+    admin: {
+      components: {
+        RowLabel: arrayRowLabelField({
+          prefix: "",
+          fieldName: "label",
+        }),
+      },
+    },
     fields: [
       selectField({
         name: "days",
@@ -67,6 +76,7 @@ export const openingHoursField = createField((props) => {
 
   return groupField({
     name: "openingHours",
+    label: "",
     interfaceName: "OpeningHours",
     fields: [items, customOpeningHours],
   });

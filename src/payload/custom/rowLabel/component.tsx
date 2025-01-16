@@ -24,9 +24,9 @@ const useArrayRowLabel = (props: Props) => {
   function getField(): any {
     const prop = getNestedProperty(data, fieldName);
 
-    if (!prop) {
-      console.error(`Field ${fieldName} not found in data`, data);
-    }
+    // if (!prop) {
+    //   // console.error(`Field ${fieldName} not found in data`, data);
+    // }
     return prop;
   }
 
