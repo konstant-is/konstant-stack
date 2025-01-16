@@ -1,4 +1,8 @@
 // @ts-nocheck
+
+// Define a utility type to extract the keys from a union type
+type ExtractKeys<T> = T extends string ? T : never;
+
 /**
  * Get nested property of an object
  * @param obj
@@ -47,3 +51,16 @@ export function deepMerge<T, R>(target: T, source: R): T {
 
   return output;
 }
+
+// Create a generic function to create the record and options based on the type
+export const createObjectKeys = <T extends string>(keys: ExtractKeys<T>[]) => {
+  const values = keys.reduce(
+    (acc, key) => {
+      acc[key] = key;
+      return acc;
+    },
+    {} as Record<ExtractKeys<T>, string>,
+  );
+
+  return values;
+};

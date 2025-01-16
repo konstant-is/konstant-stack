@@ -39,7 +39,7 @@ export const openingHoursField = createField((props) => {
         defaultValue: [],
         options: dayOptions,
       }),
-      textField({ name: "label", required: true }),
+      textField({ name: "label", required: true, localized: true }),
       ...timeFields(),
     ],
   });
@@ -48,11 +48,12 @@ export const openingHoursField = createField((props) => {
     name: "custom",
     label: "Custom Opening Hours",
     fields: [
-      textField({ name: "label", required: true }),
+      textField({ name: "label", required: true, localized: true }),
       dateField({
         name: "date",
         label: "Date",
         required: true,
+        localized: false,
         admin: {
           date: {
             pickerAppearance: "dayOnly",
@@ -67,34 +68,7 @@ export const openingHoursField = createField((props) => {
   return groupField({
     name: "openingHours",
     interfaceName: "OpeningHours",
-    fields: [
-      rowField({
-        fields: [
-          textField({
-            name: "openLabel",
-            admin: { width: "50%" },
-          }),
-          textField({
-            name: "closedLabel",
-            admin: { width: "50%" },
-          }),
-        ],
-      }),
-      rowField({
-        fields: [
-          textField({
-            name: "openNowLabel",
-            admin: { width: "50%" },
-          }),
-          textField({
-            name: "closedNowLabel",
-            admin: { width: "50%" },
-          }),
-        ],
-      }),
-      items,
-      customOpeningHours,
-    ],
+    fields: [items, customOpeningHours],
   });
 });
 
