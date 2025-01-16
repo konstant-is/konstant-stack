@@ -25,10 +25,21 @@ function deepMerge(target, source) {
   }
   return output;
 }
+var createObjectKeys = (keys) => {
+  const values = keys.reduce(
+    (acc, key) => {
+      acc[key] = key;
+      return acc;
+    },
+    {}
+  );
+  return values;
+};
 
 export {
   getNestedProperty,
   isObject,
-  deepMerge
+  deepMerge,
+  createObjectKeys
 };
-//# sourceMappingURL=chunk-Y4FC33LH.js.map
+//# sourceMappingURL=chunk-A334AXUR.js.map

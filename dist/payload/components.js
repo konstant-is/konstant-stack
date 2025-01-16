@@ -4,7 +4,7 @@ import {
 } from "../chunk-H25YBAVB.js";
 import {
   getNestedProperty
-} from "../chunk-Y4FC33LH.js";
+} from "../chunk-A334AXUR.js";
 import {
   formatSlug
 } from "../chunk-NUDE4V2R.js";

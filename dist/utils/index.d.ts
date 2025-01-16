@@ -1,5 +1,5 @@
 export { dateFormat, formatIso, isBetween, timeFormat, useDate } from './date.js';
-export { deepMerge, getNestedProperty, isObject } from './object.js';
+export { createObjectKeys, deepMerge, getNestedProperty, isObject } from './object.js';
 export { capitalize, createQueryString, formatSlug } from './string.js';
 export { isDate } from 'date-fns';
 

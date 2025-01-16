@@ -3,7 +3,7 @@ import "../chunk-H25YBAVB.js";
 import "../chunk-7WMKQBU4.js";
 import {
   deepMerge
-} from "../chunk-Y4FC33LH.js";
+} from "../chunk-A334AXUR.js";
 import {
   capitalize,
   formatSlug
@@ -713,7 +713,7 @@ var openingHoursField = createField2((props) => {
         defaultValue: [],
         options: dayOptions
       }),
-      textField({ name: "label", required: true }),
+      textField({ name: "label", required: true, localized: true }),
       ...timeFields()
     ]
   });
@@ -721,11 +721,12 @@ var openingHoursField = createField2((props) => {
     name: "custom",
     label: "Custom Opening Hours",
     fields: [
-      textField({ name: "label", required: true }),
+      textField({ name: "label", required: true, localized: true }),
       dateField({
         name: "date",
         label: "Date",
         required: true,
+        localized: false,
         admin: {
           date: {
             pickerAppearance: "dayOnly",
@@ -739,34 +740,7 @@ var openingHoursField = createField2((props) => {
   return groupField({
     name: "openingHours",
     interfaceName: "OpeningHours",
-    fields: [
-      rowField({
-        fields: [
-          textField({
-            name: "openLabel",
-            admin: { width: "50%" }
-          }),
-          textField({
-            name: "closedLabel",
-            admin: { width: "50%" }
-          })
-        ]
-      }),
-      rowField({
-        fields: [
-          textField({
-            name: "openNowLabel",
-            admin: { width: "50%" }
-          }),
-          textField({
-            name: "closedNowLabel",
-            admin: { width: "50%" }
-          })
-        ]
-      }),
-      items,
-      customOpeningHours
-    ]
+    fields: [items, customOpeningHours]
   });
 });
 var timeFields = () => {

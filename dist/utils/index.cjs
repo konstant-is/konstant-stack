@@ -33,6 +33,7 @@ __export(utils_exports, {
   canUseDom: () => canUseDom,
   capitalize: () => capitalize,
   createFieldOptions: () => createFieldOptions,
+  createObjectKeys: () => createObjectKeys,
   createQueryString: () => createQueryString,
   dateFormat: () => dateFormat,
   deepMerge: () => deepMerge,
@@ -172,11 +173,22 @@ function deepMerge(target, source) {
   }
   return output;
 }
+var createObjectKeys = (keys) => {
+  const values = keys.reduce(
+    (acc, key) => {
+      acc[key] = key;
+      return acc;
+    },
+    {}
+  );
+  return values;
+};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   canUseDom,
   capitalize,
   createFieldOptions,
+  createObjectKeys,
   createQueryString,
   dateFormat,
   deepMerge,

@@ -1,3 +1,4 @@
+type ExtractKeys<T> = T extends string ? T : never;
 /**
  * Get nested property of an object
  * @param obj
@@ -17,5 +18,6 @@ declare function isObject(item: unknown): boolean;
  * @param ...sources
  */
 declare function deepMerge<T, R>(target: T, source: R): T;
+declare const createObjectKeys: <T extends string>(keys: ExtractKeys<T>[]) => Record<ExtractKeys<T>, string>;
 
-export { deepMerge, getNestedProperty, isObject };
+export { createObjectKeys, deepMerge, getNestedProperty, isObject };

@@ -20,6 +20,7 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // src/utils/object.ts
 var object_exports = {};
 __export(object_exports, {
+  createObjectKeys: () => createObjectKeys,
   deepMerge: () => deepMerge,
   getNestedProperty: () => getNestedProperty,
   isObject: () => isObject
@@ -51,8 +52,19 @@ function deepMerge(target, source) {
   }
   return output;
 }
+var createObjectKeys = (keys) => {
+  const values = keys.reduce(
+    (acc, key) => {
+      acc[key] = key;
+      return acc;
+    },
+    {}
+  );
+  return values;
+};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+  createObjectKeys,
   deepMerge,
   getNestedProperty,
   isObject
