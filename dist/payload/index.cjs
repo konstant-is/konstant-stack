@@ -813,6 +813,14 @@ var openingHoursField = createField2((props) => {
   const items = arrayField({
     name: "items",
     label: "Opening Hours",
+    admin: {
+      components: {
+        RowLabel: arrayRowLabelField({
+          prefix: "",
+          fieldName: "label"
+        })
+      }
+    },
     fields: [
       selectField({
         name: "days",
@@ -848,6 +856,7 @@ var openingHoursField = createField2((props) => {
   });
   return groupField({
     name: "openingHours",
+    label: "",
     interfaceName: "OpeningHours",
     fields: [items, customOpeningHours]
   });

@@ -158,9 +158,6 @@ var useArrayRowLabel = (props) => {
   const rowNr = `${(rowNumber || 0) + 1}`;
   function getField() {
     const prop = getNestedProperty(data, fieldName);
-    if (!prop) {
-      console.error(`Field ${fieldName} not found in data`, data);
-    }
     return prop;
   }
   const getLabel = () => {
