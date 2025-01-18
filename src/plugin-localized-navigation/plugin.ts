@@ -67,7 +67,7 @@ const createPlugin = ({
         ...(collection.hooks || {}),
         beforeChange: mergeHooks(
           [
-            resolveUrl(configs.urlFieldConfig),
+            resolveUrl(pluginConfig, configs.urlFieldConfig),
             resolveLocalizedUrl(configs.localizedUrlFieldConfig),
             resolveLocalizedSlugs(configs.localizedSlugFieldConfig),
           ],

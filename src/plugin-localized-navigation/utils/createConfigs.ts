@@ -39,7 +39,6 @@ const createUrlFieldConfig = (
   defaults: UrlFieldConfig,
 ): UrlFieldConfig => ({
   fieldName: config.fieldName || defaults.fieldName,
-  useNestedDocs: config.useNestedDocs ?? defaults.useNestedDocs,
   generateUrl: config.generateUrl,
 });
 
@@ -79,7 +78,6 @@ export const createConfigs = (
 
   const urlFieldConfig = createUrlFieldConfig(urlField, {
     fieldName: "url",
-    useNestedDocs: useNestedDocs(pluginConfig),
   });
 
   const localizedUrlFieldConfig = createLocalizedUrlFieldConfig(
