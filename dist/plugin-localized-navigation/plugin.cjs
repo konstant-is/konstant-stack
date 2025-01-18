@@ -66,7 +66,7 @@ var createLocalizedUrlField = (config) => {
     fields: config.locales.map((locale) => ({
       name: locale,
       type: "text",
-      defaultValue: "undefined",
+      defaultValue: "",
       required: true,
       localized: false
     }))

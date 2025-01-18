@@ -1,5 +1,4 @@
 import "../chunk-NMT6RIEO.js";
-import "../chunk-H25YBAVB.js";
 import "../chunk-7WMKQBU4.js";
 import {
   deepMerge
@@ -8,6 +7,7 @@ import {
   capitalize,
   formatSlug
 } from "../chunk-NUDE4V2R.js";
+import "../chunk-H25YBAVB.js";
 
 // src/payload/custom/permalink/index.ts
 var permalinkField = (props) => {
