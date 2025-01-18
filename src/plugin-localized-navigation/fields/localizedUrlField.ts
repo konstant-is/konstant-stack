@@ -3,7 +3,7 @@ import { Field } from "payload";
 import { LocalizedUrlFieldConfig } from "../types";
 
 export const createLocalizedUrlField = (
-  config: LocalizedUrlFieldConfig
+  config: LocalizedUrlFieldConfig,
 ): Field => {
   return {
     name: config.fieldName,
@@ -16,7 +16,7 @@ export const createLocalizedUrlField = (
     fields: config.locales.map((locale) => ({
       name: locale,
       type: "text",
-      defaultValue: "undefined",
+      defaultValue: "",
       required: true,
       localized: false,
     })),
