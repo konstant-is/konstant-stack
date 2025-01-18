@@ -11,6 +11,7 @@ type LocalizedNavigationPluginOptions = {
     localizedSlugField?: Partial<LocalizedSlugFieldConfig>;
     localizedUrlField?: Partial<LocalizedUrlFieldConfig>;
     usePermalink?: boolean;
+    appendLocaleToUrl?: "all" | "exclude-default" | "none";
     nestedDocsPlugin?: Omit<NestedDocsPluginConfig, "collections">;
 };
 type LocalizedSlugFieldConfig = {
@@ -40,7 +41,6 @@ type SlugFieldConfig = {
 type GenerateURL = (data: Record<string, unknown>) => string;
 type UrlFieldConfig = {
     fieldName: string;
-    useNestedDocs: boolean;
     generateUrl?: GenerateURL;
 };
 /**

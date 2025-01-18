@@ -1,7 +1,7 @@
 import * as react_jsx_runtime from 'react/jsx-runtime';
 import { UIFieldClientProps, TextFieldClientProps } from 'payload';
 import React from 'react';
-import { S as SlugifyOptions } from '../types-dAXvMinA.js';
+import { S as SlugifyOptions } from '../types-CiPlxUYe.js';
 import 'node_modules/@payloadcms/plugin-nested-docs/dist/types';
 
 type Props = UIFieldClientProps & {

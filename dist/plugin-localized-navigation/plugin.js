@@ -236,24 +236,50 @@ var resolveLocalizedUrl = (config) => ({ data, operation, req }) => {
 };
 
 // src/plugin-localized-navigation/hooks/resolveUrl.ts
-var resolveUrl = (config) => ({ data }) => {
+var resolveUrl = (pluginConfig2, config) => ({ data, req }) => {
+  const { payload, locale } = req;
+  const { defaultLocale = "en" } = payload.config.localization || {};
+  const currentLocale = locale || defaultLocale || "en";
+  const useNestedDocs = pluginConfig2.nestedDocsPlugin !== void 0;
   const log = logger(false);
   log.section("resolveUrl");
-  let generatedUrl = "";
-  if (typeof config.generateUrl === "function") {
-    generatedUrl = config.generateUrl(data);
-  }
-  let nestedUrl = "";
-  if (config.useNestedDocs) {
-    log.info(data.breadcrumbs);
-    const breadcrumbs = Array.isArray(data.breadcrumbs) ? data.breadcrumbs : [];
-    nestedUrl = breadcrumbs.reverse()[0]?.url || "";
-  }
-  log.info("generatedUrl:", generatedUrl), log.info("nestedUrl:", nestedUrl);
+  const baseUrl = generateUrl(config, data, useNestedDocs);
+  log.info("Base URL generated:", baseUrl);
+  const resolvedUrl = resolveFinalUrl({
+    baseUrl,
+    locale: currentLocale,
+    defaultLocale,
+    appendTo: pluginConfig2.appendLocaleToUrl
+  });
+  log.info("Final resolved URL:", resolvedUrl);
   return {
     ...data,
-    [config.fieldName]: config.useNestedDocs ? nestedUrl : generatedUrl
+    [config.fieldName]: resolvedUrl
   };
+};
+var generateUrl = (config, data, useNestedDocs) => {
+  const generatedUrl = typeof config.generateUrl === "function" ? config.generateUrl(data) : "";
+  if (useNestedDocs) {
+    const breadcrumbs = Array.isArray(data.breadcrumbs) ? data.breadcrumbs : [];
+    const nestedUrl = breadcrumbs.reverse()[0]?.url || "";
+    return nestedUrl || generatedUrl;
+  }
+  return generatedUrl;
+};
+var resolveFinalUrl = ({
+  baseUrl,
+  appendTo = "none",
+  locale,
+  defaultLocale
+}) => {
+  switch (appendTo) {
+    case "all":
+      return `/${locale}${baseUrl}`;
+    case "exclude-default":
+      return locale === defaultLocale ? baseUrl : `/${locale}${baseUrl}`;
+    default:
+      return baseUrl;
+  }
 };
 
 // src/plugin-localized-navigation/hooks/resolveLocalizedSlugs.ts
@@ -291,21 +317,6 @@ var resolveLocalizedSlugs = (config) => async ({ data, req, operation }) => {
   };
 };
 
-// src/plugin-localized-navigation/utils/utils.ts
-var useNestedDocs = (pluginConfig2) => typeof pluginConfig2.nestedDocsPlugin === "object";
-var getLocales = (config) => {
-  const { locales } = config.localization || {};
-  if (!locales || locales.length === 0) {
-    throw new Error(
-      "Localization is required but not enabled. Please configure 'localization.locales' in Payload CMS."
-    );
-  }
-  return locales.map((locale) => String(locale));
-};
-var mergeHooks = (newHooks, existingHooks) => {
-  return [...existingHooks || [], ...newHooks];
-};
-
 // src/plugin-localized-navigation/utils/createConfigs.ts
 var createSlugFieldConfig = (config, defaults) => ({
   fieldName: config.fieldName || defaults.fieldName,
@@ -328,7 +339,6 @@ var createLocalizedSlugFieldConfig = (config, defaults) => ({
 });
 var createUrlFieldConfig = (config, defaults) => ({
   fieldName: config.fieldName || defaults.fieldName,
-  useNestedDocs: config.useNestedDocs ?? defaults.useNestedDocs,
   generateUrl: config.generateUrl
 });
 var createLocalizedUrlFieldConfig = (config, defaults) => ({
@@ -356,8 +366,7 @@ var createConfigs = (pluginConfig2, locales) => {
     }
   );
   const urlFieldConfig = createUrlFieldConfig(urlField, {
-    fieldName: "url",
-    useNestedDocs: useNestedDocs(pluginConfig2)
+    fieldName: "url"
   });
   const localizedUrlFieldConfig = createLocalizedUrlFieldConfig(
     localizedUrlField,
@@ -449,6 +458,20 @@ var enhanceFields = ({
   };
 };
 
+// src/plugin-localized-navigation/utils/utils.ts
+var getLocales = (config) => {
+  const { locales } = config.localization || {};
+  if (!locales || locales.length === 0) {
+    throw new Error(
+      "Localization is required but not enabled. Please configure 'localization.locales' in Payload CMS."
+    );
+  }
+  return locales.map((locale) => String(locale));
+};
+var mergeHooks = (newHooks, existingHooks) => {
+  return [...existingHooks || [], ...newHooks];
+};
+
 // src/plugin-localized-navigation/plugin.ts
 var localizedNavigationPlugin = (pluginConfig2) => async (config) => {
   const locales = getLocales(config);
@@ -487,7 +510,7 @@ var createPlugin = ({
         ...collection.hooks || {},
         beforeChange: mergeHooks(
           [
-            resolveUrl(configs.urlFieldConfig),
+            resolveUrl(pluginConfig2, configs.urlFieldConfig),
             resolveLocalizedUrl(configs.localizedUrlFieldConfig),
             resolveLocalizedSlugs(configs.localizedSlugFieldConfig)
           ],
