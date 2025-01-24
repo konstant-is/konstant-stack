@@ -15,7 +15,7 @@ export default defineConfig((options) => ({
   // minify: true, // Minify output
   clean: true, // Clean output directory before building
   css: true, // Include CSS in the build
-  external: ["react", "payload"],
+  external: ["react", "payload", "@payloadcms/ui"],
   esbuildOptions: (options) => {
     options.alias = {
       "@": "./src", // Map '@' to the 'src' directory
