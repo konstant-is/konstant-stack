@@ -1,31 +1,32 @@
-import { createField } from '@/utils/createField.js'
-import { field } from '@/utils/field.js'
-import { createObjectKeys } from '@konstant/utilities-ui'
+import { createField } from "../utils/createField.js";
+import { field } from "../utils/field.js";
+
+import { createObjectKeys } from "@/utils/index.js";
 
 const fields = createObjectKeys([
-  'addressLine1',
-  'addressLine2',
-  'city',
-  'location',
-  'postalCode',
-  'state',
-])
+  "addressLine1",
+  "addressLine2",
+  "city",
+  "location",
+  "postalCode",
+  "state",
+]);
 
-type FieldKeys = keyof typeof fields
+type FieldKeys = keyof typeof fields;
 
 export const addressField = createField<{
-  hideFields?: FieldKeys[]
+  hideFields?: FieldKeys[];
 }>((props) => {
   const fieldCondition = (fieldName: FieldKeys) => {
     if (!props.hideFields?.length) {
-      return true
+      return true;
     }
-    return props.hideFields.includes(fieldName) ? false : true
-  }
+    return props.hideFields.includes(fieldName) ? false : true;
+  };
 
   return field({
-    name: props.name ?? 'address',
-    type: 'group',
+    name: props.name ?? "address",
+    type: "group",
     admin: {
       condition: props.condition,
       description: props.description,
@@ -33,74 +34,74 @@ export const addressField = createField<{
     },
     fields: [
       field({
-        type: 'row',
+        type: "row",
         fields: [
           field({
-            name: 'addressLine1',
-            type: 'text',
-            label: 'Address',
+            name: "addressLine1",
+            type: "text",
+            label: "Address",
             localized: false,
             required: false,
           }),
           field({
-            name: 'addressLine2',
-            type: 'text',
+            name: "addressLine2",
+            type: "text",
             admin: {
-              condition: (_) => fieldCondition('addressLine2'),
+              condition: (_) => fieldCondition("addressLine2"),
             },
-            label: 'Address extra',
+            label: "Address extra",
             localized: false,
             required: false,
           }),
         ],
       }),
       field({
-        type: 'row',
+        type: "row",
         fields: [
           field({
-            name: 'state',
-            type: 'text',
+            name: "state",
+            type: "text",
             admin: {
-              condition: (_) => fieldCondition('state'),
+              condition: (_) => fieldCondition("state"),
             },
-            label: 'State',
+            label: "State",
             localized: false,
             required: false,
           }),
           field({
-            name: 'city',
-            type: 'text',
+            name: "city",
+            type: "text",
             admin: {
-              condition: (_) => fieldCondition('city'),
+              condition: (_) => fieldCondition("city"),
             },
-            label: 'City',
+            label: "City",
             localized: false,
             required: false,
           }),
           field({
-            name: 'postalCode',
-            type: 'text',
+            name: "postalCode",
+            type: "text",
             admin: {
-              condition: (_) => fieldCondition('postalCode'),
+              condition: (_) => fieldCondition("postalCode"),
             },
-            label: 'Postal Code',
+            label: "Postal Code",
             localized: false,
             required: false,
           }),
         ],
       }),
       field({
-        name: 'location',
-        type: 'point',
+        name: "location",
+        type: "point",
         admin: {
-          condition: (_) => fieldCondition('location'),
+          condition: (_) => fieldCondition("location"),
         },
         localized: false,
         required: false,
       }),
     ],
-    interfaceName: 'Address',
+    interfaceName: "Address",
     label: props?.label,
     localized: false,
-  })
-})
+  });
+});

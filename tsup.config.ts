@@ -1,15 +1,13 @@
-import { sassPlugin } from "esbuild-sass-plugin";
 import { defineConfig } from "tsup";
 
+const payloadEntries = [
+  "src/payload/index.ts",
+  "src/payload/fields/index.ts",
+  "src/payload/queries/index.ts",
+  "src/payload/exports/client.ts",
+];
 export default defineConfig((options) => ({
-  entry: [
-    "src/utils/index.ts",
-    "src/utils/date.ts",
-    "src/utils/object.ts",
-    "src/utils/string.ts",
-    "src/payload/index.ts",
-    "src/payload/components.ts",
-  ], // Main entry point
+  entry: [...payloadEntries, "src/utils/index.ts"],
   outDir: "dist", // Output directory
   format: ["cjs", "esm"], // Build CommonJS and ESM formats
   sourcemap: true, // Generate source maps
@@ -18,12 +16,6 @@ export default defineConfig((options) => ({
   clean: true, // Clean output directory before building
   css: true, // Include CSS in the build
   external: ["react", "payload"],
-  // injectCSS: true,
-  esbuildPlugins: [
-    sassPlugin({
-      type: "css",
-    }),
-  ],
   esbuildOptions: (options) => {
     options.alias = {
       "@": "./src", // Map '@' to the 'src' directory
