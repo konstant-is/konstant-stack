@@ -2,11 +2,47 @@
   "name": "konstant-stack",
   "version": "0.1.0",
   "type": "module",
-  "scripts": {},
   "files": [
     "dist"
   ],
-  "exports": {},
-  "dependencies": {},
-  "devDependencies": {}
+  "scripts": {
+    "build": "pnpm ci:clean && pnpm tsup",
+    "build:types": "tsc --outDir dist --rootDir ./src",
+    "ci:clean": "rimraf {dist,*.tsbuildinfo}",
+    "ci:copyfiles": "copyfiles -u 1 \"src/**/*.{html,css,scss,ttf,woff,woff2,eot,svg,jpg,png,json}\" dist/",
+    "ci:patch": "pnpm ci:version patch && pnpm ci:tag",
+    "ci:tag": "node scripts/tag.js",
+    "ci:version": "node scripts/ci-version.js",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix"
+  },
+  "dependencies": {
+    "@payloadcms/next": "^3.18.0",
+    "@payloadcms/ui": "^3.18.0",
+    "payload": "^3.18.0",
+    "next": "^15.1.5",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "url": "^0.11.4"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.2.0",
+    "@payloadcms/eslint-config": "^3.9.0",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "cross-env": "^7.0.3",
+    "eslint": "^9",
+    "eslint-config-next": "15.1.5",
+    "fs": "0.0.1-security",
+    "prettier": "^3",
+    "rimraf": "^6.0.1",
+    "semver": "^7.6.3",
+    "sort-package-json": "^2.10.0",
+    "tsup": "^8.3.5",
+    "typescript": "latest"
+  },
+  "engines": {
+    "node": "^18.20.2 || >=20.9.0"
+  }
 }
