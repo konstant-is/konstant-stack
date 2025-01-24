@@ -6,10 +6,10 @@ settings:
 
 dependencies:
   '@payloadcms/next':
-    specifier: ^3.18.0
+    specifier: 3.19.0
     version: 3.19.0(@types/react@19.0.8)(graphql@16.10.0)(monaco-editor@0.52.2)(next@15.1.6)(payload@3.19.0)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.3)
   '@payloadcms/ui':
-    specifier: ^3.18.0
+    specifier: 3.19.0
     version: 3.19.0(@types/react@19.0.8)(monaco-editor@0.52.2)(next@15.1.6)(payload@3.19.0)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.3)
   date-fns:
     specifier: 4.1.0
@@ -21,7 +21,7 @@ dependencies:
     specifier: ^15.1.5
     version: 15.1.6(react-dom@19.0.0)(react@19.0.0)
   payload:
-    specifier: ^3.18.0
+    specifier: 3.19.0
     version: 3.19.0(graphql@16.10.0)(monaco-editor@0.52.2)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.3)
   qs-esm:
     specifier: ^7.0.2
@@ -3847,7 +3847,6 @@ packages:
     resolution: {integrity: sha512-kGzZ3LWWQcGIAmg6iWvXn0ei6WDtV26wzHRMwDSzmAbcXrTEXxHy6IehI6/4eT6VRKyMP1eF1VqwrVUmE/LR7A==}
     dependencies:
       resolve-pkg-maps: 1.0.0
-    dev: true
 
   /get-tsconfig@4.8.1:
     resolution: {integrity: sha512-k9PN+cFBmaLWtVz29SkUoqU5O0slLuHJXt/2P+tMVFT+phsSGXGkp9t3rQIqdz0e+06EHNGs3oM6ZX1s2zHxRg==}
@@ -5884,7 +5883,7 @@ packages:
     hasBin: true
     dependencies:
       esbuild: 0.23.1
-      get-tsconfig: 4.8.1
+      get-tsconfig: 4.10.0
     optionalDependencies:
       fsevents: 2.3.3
     dev: false
