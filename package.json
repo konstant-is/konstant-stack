@@ -5,16 +5,37 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "pnpm ci:clean && pnpm tsup",
-    "build:types": "tsc --outDir dist --rootDir ./src",
-    "ci:clean": "rimraf {dist,*.tsbuildinfo}",
-    "ci:copyfiles": "copyfiles -u 1 \"src/**/*.{html,css,scss,ttf,woff,woff2,eot,svg,jpg,png,json}\" dist/",
-    "ci:patch": "pnpm ci:version patch && pnpm ci:tag",
-    "ci:tag": "node tools/scripts/tag.js",
-    "ci:version": "node tools/scripts/ci-version.js",
-    "lint": "eslint ./src",
-    "lint:fix": "eslint ./src --fix"
+  "exports": {
+    "./payload": {
+      "import": "./dist/payload/index.js",
+      "types": "./dist/payload/index.d.ts",
+      "default": "./dist/payload/index.js"
+    },
+    "./payload/client": {
+      "import": "./dist/payload/exports/client.js",
+      "types": "./dist/payload/exports/client.d.ts",
+      "default": "./dist/payload/exports/client.js"
+    },
+    "./payload/fields": {
+      "import": "./dist/payload/fields/index.js",
+      "types": "./dist/payload/fields.d.ts",
+      "default": "./dist/payload/fields/index.js"
+    },
+    "./payload/queries": {
+      "import": "./dist/payload/queries/index.js",
+      "types": "./dist/payload/queries.d.ts",
+      "default": "./dist/payload/queries/index.js"
+    },
+    "./utils": {
+      "import": "./dist/utils/index.js",
+      "types": "./dist/utils/index.d.ts",
+      "default": "./dist/utils/index.js"
+    },
+    "./utils/date": {
+      "import": "./dist/utils/date/index.js",
+      "types": "./dist/utils/date/index.d.ts",
+      "default": "./dist/utils/date/index.js"
+    }
   },
   "dependencies": {
     "@payloadcms/next": "3.19.0",
@@ -28,25 +49,5 @@
     "qs-esm": "^7.0.2",
     "slugify": "^1",
     "url": "^0.11.4"
-  },
-  "devDependencies": {
-    "@eslint/eslintrc": "^3.2.0",
-    "@payloadcms/eslint-config": "^3.9.0",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "cross-env": "^7.0.3",
-    "eslint": "^9",
-    "eslint-config-next": "15.1.5",
-    "fs": "0.0.1-security",
-    "prettier": "^3",
-    "rimraf": "^6.0.1",
-    "semver": "^7.6.3",
-    "sort-package-json": "^2.10.0",
-    "tsup": "^8.3.5",
-    "typescript": "latest"
-  },
-  "engines": {
-    "node": "^18.20.2 || >=20.9.0"
   }
 }
