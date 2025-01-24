@@ -1,6 +1,9 @@
-export const arrayRowLabelField = (props: { fieldName: string; prefix: string }) => {
+export const arrayRowLabelField = (props: {
+  fieldName: string;
+  prefix: string;
+}) => {
   return {
     clientProps: props,
-    path: '@konstant/utilities-payload/client#ArrayRowLabel',
-  }
-}
+    path: "@konstant/stack/payload/client#ArrayRowLabel",
+  };
+};
