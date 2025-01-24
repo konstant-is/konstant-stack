@@ -6,10 +6,10 @@ settings:
 
 dependencies:
   '@payloadcms/next':
-    specifier: 3.19.0
+    specifier: ^3.19.0
     version: 3.19.0(@types/react@19.0.8)(graphql@16.10.0)(monaco-editor@0.52.2)(next@15.1.6)(payload@3.19.0)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.3)
   '@payloadcms/ui':
-    specifier: 3.19.0
+    specifier: ^3.19.0
     version: 3.19.0(@types/react@19.0.8)(monaco-editor@0.52.2)(next@15.1.6)(payload@3.19.0)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.3)
   date-fns:
     specifier: ^4.1.0
@@ -21,7 +21,7 @@ dependencies:
     specifier: ^15.1.5
     version: 15.1.6(react-dom@19.0.0)(react@19.0.0)
   payload:
-    specifier: 3.19.0
+    specifier: ^3.19.0
     version: 3.19.0(graphql@16.10.0)(monaco-editor@0.52.2)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.3)
   qs-esm:
     specifier: ^7.0.2
