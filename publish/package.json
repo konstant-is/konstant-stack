@@ -1,0 +1,22 @@
+{
+  "name": "konstant-stack",
+  "version": "0.1.1",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": {},
+  "dependencies": {
+    "@payloadcms/next": "3.19.0",
+    "@payloadcms/ui": "3.19.0",
+    "payload": "3.19.0",
+    "next": "^15.1.5",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "date-fns": "4.1.0",
+    "deepmerge": "^4.3.1",
+    "qs-esm": "^7.0.2",
+    "slugify": "^1",
+    "url": "^0.11.4"
+  }
+}
