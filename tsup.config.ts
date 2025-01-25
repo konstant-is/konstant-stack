@@ -26,6 +26,7 @@ export default defineConfig((options) => ({
     "payload",
     "react",
     "react-dom",
+    "fs",
   ],
   esbuildOptions: (options) => {
     options.alias = {
