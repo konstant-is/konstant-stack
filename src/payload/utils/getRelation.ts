@@ -12,14 +12,14 @@ export const getRelation = <T>(props: RelationProps<T>) => {
 
   const getValue = (): null | T => getReference(value);
 
-  const fetch = async (query: FetchQuery<T>) => {
+  const fetch = async <P>(query: FetchQuery<P>) => {
     return await query({
       id: value as string,
       collection: relationTo,
     });
   };
 
-  const getOrFetchValue = async (query: FetchQuery<T>): Promise<T> => {
+  const getOrFetchValue = async <P>(query: FetchQuery<P>): Promise<T | P> => {
     const resolvedValue = getValue();
     if (resolvedValue !== null) {
       return resolvedValue;
