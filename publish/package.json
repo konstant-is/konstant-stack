@@ -26,6 +26,11 @@
       "types": "./dist/payload/queries.d.ts",
       "default": "./dist/payload/queries/index.js"
     },
+    "./payload/ui": {
+      "import": "./dist/payload/ui/index.js",
+      "types": "./dist/payload/ui.d.ts",
+      "default": "./dist/payload/ui/index.js"
+    },
     "./utils": {
       "import": "./dist/utils/index.js",
       "types": "./dist/utils/index.d.ts",

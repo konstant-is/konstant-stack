@@ -5,6 +5,7 @@ const payload = [
   "src/payload/fields/index.ts",
   "src/payload/queries/index.ts",
   "src/payload/exports/client.ts",
+  "src/payload/ui/index.ts",
 ];
 
 const utils = ["src/utils/index.ts", "src/utils/date/index.ts"];
