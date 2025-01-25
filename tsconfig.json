@@ -15,7 +15,7 @@
     "skipLibCheck": true,
     "strict": true,
     "resolveJsonModule": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "target": "ES2022",
     "paths": {
       "@/*": ["./src/*"]
