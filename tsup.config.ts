@@ -23,11 +23,11 @@ export default defineConfig((options) => ({
     "@payloadcms/next",
     "@payloadcms/ui",
     "date-fns",
-    "next",
+    // "next",
     "payload",
-    "react",
-    "react-dom",
-    "fs",
+    // "react",
+    // "react-dom",
+    // "fs",
   ],
   esbuildOptions: (options) => {
     options.alias = {

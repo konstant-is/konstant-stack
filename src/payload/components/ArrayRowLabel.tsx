@@ -1,3 +1,5 @@
+"use client";
+
 import { getNestedProperty } from "@/utils/index.js";
 import { useRowLabel } from "@payloadcms/ui";
 
@@ -23,7 +25,7 @@ const useArrayRowLabel = (props: Props) => {
   const getLabel = () => {
     const field = getNestedProperty(data, fieldName);
 
-    return field || fallback || "Item";
+    return field || fallback || "New row";
   };
 
   const getFullLabel = () => {
