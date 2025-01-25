@@ -23,6 +23,7 @@ type Options = {
 export const linkField = createField<Options>((props) => {
   const group = field({
     name: props.name || "link",
+    interfaceName: "Link",
     type: "group",
     admin: {
       condition: props.condition,
@@ -31,7 +32,16 @@ export const linkField = createField<Options>((props) => {
     },
     fields: [
       linkOptionsField(),
-      ...types(props),
+      documentReferenceField({
+        condition: (_, siblingData) =>
+          siblingData?.type === linkOptions.values.reference,
+        relationTo: props.relationTo,
+      }),
+      urlField({
+        condition: (_, siblingData) =>
+          siblingData?.type === linkOptions.values.custom,
+        label: "Custom URL",
+      }),
       labelField,
       appearance(props),
     ],
@@ -70,21 +80,6 @@ const linkOptionsField = () => {
   });
 };
 
-const types = (props: Options): Field[] => {
-  return [
-    internalLinkField({
-      condition: (_, siblingData) =>
-        siblingData?.type === linkOptions.values.reference,
-      relationTo: props.relationTo,
-    }),
-    urlField({
-      condition: (_, siblingData) =>
-        siblingData?.type === linkOptions.values.custom,
-      label: "Custom URL",
-    }),
-  ];
-};
-
 const appearance = (props: Options) =>
   field({
     name: "appearance",
@@ -105,15 +100,19 @@ const labelField = field({
   required: true,
 });
 
-export const internalLinkField = createField<{
+export const documentReferenceField = createField<{
   relationTo: string[];
 }>((props) =>
   field({
-    name: "reference",
+    name: props.name || "reference",
     type: "relationship",
-    label: "Document to link to",
+    label: props.label || "Document to link to",
     maxDepth: 1,
     relationTo: props.relationTo,
-    required: props.required || true,
+    required: props.required,
+    admin: {
+      condition: props?.condition,
+      hidden: props.hidden,
+    },
   })
 );
