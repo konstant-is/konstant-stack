@@ -1,4 +1,4 @@
-import { createObjectKeys, toCapitalized } from "@/utils/index.js";
+import { createObjectKeys, toCapitalized, toReadable } from "@/utils/index.js";
 
 // Define a utility type to extract the keys from a union type
 type ExtractKeys<T> = T extends string ? T : never;
@@ -10,7 +10,7 @@ export const createFieldOptions = <T extends string>(
   const values = createObjectKeys(keys);
 
   const options = keys.map((key) => ({
-    label: toCapitalized(key),
+    label: toReadable(key),
     value: key,
   }));
 
