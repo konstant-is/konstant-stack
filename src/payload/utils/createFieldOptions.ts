@@ -1,4 +1,4 @@
-import { createObjectKeys, toCapitalized, toReadable } from "@/utils/index.js";
+import { createObjectKeys, toReadable } from "@/utils/index.js";
 
 // Define a utility type to extract the keys from a union type
 type ExtractKeys<T> = T extends string ? T : never;
