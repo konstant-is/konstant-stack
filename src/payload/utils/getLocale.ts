@@ -1,4 +1,6 @@
-import type { SanitizedConfig } from "payload";
+import type { Locale, SanitizedConfig } from "payload";
+
+type LocaleCode = Locale["code"];
 
 /**
  * Checks if a given string is a valid locale.
@@ -24,7 +26,7 @@ const isLocale = (
 export const getLocale = (
   config: SanitizedConfig,
   locale: null | string | undefined
-): string => {
+): LocaleCode => {
   const { localization } = config;
   if (!localization) {
     throw new Error(`Localization is not supported by Payload`);
@@ -32,7 +34,7 @@ export const getLocale = (
   const { defaultLocale, localeCodes } = localization;
 
   if (isLocale(locale, localeCodes)) {
-    return locale as string;
+    return locale as LocaleCode;
   }
 
   return defaultLocale;
