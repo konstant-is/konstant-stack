@@ -14,19 +14,24 @@ export const getRelation = <T>(props: RelationProps<T>) => {
   const getValue = (): null | T => getReference(value);
 
   const getOrFetchValue = async (
-    queryCb: (args: FetchDocArgs) => Promise<T>
-  ): Promise<T> => {
+    queryCb: (args: FetchDocArgs) => Promise<T | null>
+  ): Promise<T | null> => {
     const resolvedValue = getValue();
     if (resolvedValue !== null) {
       return resolvedValue;
     }
 
-    const result = await queryCb({
-      id: value as DefaultDocumentIDType,
-      collection: relationTo,
-    });
+    try {
+      const result = await queryCb({
+        id: value as DefaultDocumentIDType,
+        collection: relationTo,
+      });
 
-    return result;
+      return result;
+    } catch (e) {
+      console.error(e);
+      return null;
+    }
   };
 
   return {
