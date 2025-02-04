@@ -1,5 +1,8 @@
-export function getReference<T>(value: null | string | T | undefined) {
-  const isResolved = typeof value !== 'string'
+import { DefaultDocumentIDType } from "payload";
 
-  return isResolved ? (value as T) : null
+export function getReference<T>(
+  value: DefaultDocumentIDType | T | null | undefined
+) {
+  const isResolved = typeof value !== "string";
+  return isResolved ? (value as T) : null;
 }

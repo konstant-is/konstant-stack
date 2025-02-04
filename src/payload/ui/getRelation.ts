@@ -1,21 +1,12 @@
 import { DefaultDocumentIDType, JsonValue } from "payload";
 import { getReference } from "./getReference.js";
 
-type RelationValue =
-  | {
-      [key: string]: JsonValue;
-      id: DefaultDocumentIDType;
-    }
-  | DefaultDocumentIDType;
-
-type RelationProps<T extends RelationValue> = {
+type RelationProps<T> = {
   relationTo: string;
-  value: T;
+  value: T | DefaultDocumentIDType;
 };
 
-export const getRelation = <T extends RelationValue>(
-  props: RelationProps<T>
-) => {
+export const getRelation = <T>(props: RelationProps<T>) => {
   const { relationTo, value } = props;
 
   const getValue = (): null | T => getReference(value);
