@@ -1,31 +1,32 @@
+import { DefaultDocumentIDType, JsonValue } from "payload";
 import { getReference } from "./getReference.js";
 
-type RelationProps<T> = {
+type RelationValue =
+  | {
+      [key: string]: JsonValue;
+      id: DefaultDocumentIDType;
+    }
+  | DefaultDocumentIDType;
+
+type RelationProps<T extends RelationValue> = {
   relationTo: string;
-  value: string | T;
+  value: T;
 };
 
-type FetchQuery<T> = (params: { collection: string; id: string }) => Promise<T>;
-
-export const getRelation = <T>(props: RelationProps<T>) => {
+export const getRelation = <T extends RelationValue>(
+  props: RelationProps<T>
+) => {
   const { relationTo, value } = props;
 
   const getValue = (): null | T => getReference(value);
 
-  const fetch = async <P>(query: FetchQuery<P>) => {
-    return await query({
-      id: value as string,
-      collection: relationTo,
-    });
-  };
-
-  const getOrFetchValue = async <P>(query: FetchQuery<P>): Promise<T | P> => {
+  const getOrFetchValue = async (queryCb: () => Promise<T>): Promise<T> => {
     const resolvedValue = getValue();
     if (resolvedValue !== null) {
       return resolvedValue;
     }
 
-    const result = fetch(query);
+    const result = await queryCb();
     return result;
   };
 
