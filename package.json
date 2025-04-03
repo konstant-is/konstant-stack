@@ -5,27 +5,42 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "pnpm build:clean && pnpm tsup",
-    "build:types": "tsc --outDir dist --rootDir ./src",
-    "build:assets": "copyfiles -u 1 \"src/**/*.{html,css,scss,ttf,woff,woff2,eot,svg,jpg,png,json}\" dist/",
-    "build:clean": "rimraf {dist,*.tsbuildinfo}",
-    "dep:ci:patch": "pnpm ci:version patch && pnpm ci:pre-pub",
-    "dep:ci:tag": "node tools/scripts/tag.js",
-    "dep:ci:version": "node tools/scripts/ci-version.js",
-    "dep:ci:pre-pub": "ci:update-pkg && pnpm ci:tag",
-    "ci:version": "node tools/scripts/version.js",
-    "ci:version:patch": "pnpm ci:version patch",
-    "ci:version:minor": "pnpm ci:version minor",
-    "ci:version:major": "pnpm ci:version major",
-    "ci:tag": "node tools/scripts/tag-release.js",
-    "ci:sync:publish-pkg": "node tools/scripts/sync-publish-package.js",
-    "ci:pre-publish": "pnpm ci:sync:publish-pkg && pnpm ci:tag",
-    "ci:release:patch": "pnpm ci:version:patch && pnpm ci:pre-publish",
-    "ci:release:minor": "pnpm ci:version:minor && pnpm ci:pre-publish",
-    "ci:release:major": "pnpm ci:version:major && pnpm ci:pre-publish",
-    "lint": "eslint ./src",
-    "lint:fix": "eslint ./src --fix"
+  "exports": {
+    "./payload": {
+      "import": "./dist/payload/index.js",
+      "types": "./dist/payload/index.d.ts",
+      "default": "./dist/payload/index.js"
+    },
+    "./payload/client": {
+      "import": "./dist/payload/exports/client.js",
+      "types": "./dist/payload/exports/client.d.ts",
+      "default": "./dist/payload/exports/client.js"
+    },
+    "./payload/fields": {
+      "import": "./dist/payload/fields/index.js",
+      "types": "./dist/payload/fields.d.ts",
+      "default": "./dist/payload/fields/index.js"
+    },
+    "./payload/queries": {
+      "import": "./dist/payload/queries/index.js",
+      "types": "./dist/payload/queries.d.ts",
+      "default": "./dist/payload/queries/index.js"
+    },
+    "./payload/ui": {
+      "import": "./dist/payload/ui/index.js",
+      "types": "./dist/payload/ui.d.ts",
+      "default": "./dist/payload/ui/index.js"
+    },
+    "./utils": {
+      "import": "./dist/utils/index.js",
+      "types": "./dist/utils/index.d.ts",
+      "default": "./dist/utils/index.js"
+    },
+    "./utils/date": {
+      "import": "./dist/utils/date/index.js",
+      "types": "./dist/utils/date/index.d.ts",
+      "default": "./dist/utils/date/index.js"
+    }
   },
   "dependencies": {
     "deepmerge": "^4.3.1",
@@ -33,32 +48,13 @@
     "slugify": "^1.6.6",
     "url": "^0.11.4"
   },
-  "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@eslint/eslintrc": "^3.3.1",
-    "@payloadcms/eslint-config": "^3.28.0",
-    "@payloadcms/next": "3.32.0",
+  "peerDependencies": {
     "@payloadcms/ui": "3.32.0",
-    "@types/node": "^22.14.0",
-    "@types/react": "^19.1.0",
-    "@types/react-dom": "^19.1.1",
-    "cross-env": "^7.0.3",
-    "date-fns": "^4.1.0",
-    "eslint": "^9.23.0",
-    "eslint-config-next": "15.2.4",
-    "fs": "0.0.1-security",
-    "next": "^15.2.4",
-    "payload": "3.32.0",
-    "prettier": "^3.5.3",
+    "@payloadcms/next": "3.32.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "rimraf": "^6.0.1",
-    "semver": "^7.7.1",
-    "sort-package-json": "^3.0.0",
-    "tsup": "^8.4.0",
-    "typescript": "^5.8.2"
-  },
-  "engines": {
-    "node": "^18.20.2 || >=20.9.0"
+    "next": "^15.2.4",
+    "payload": "3.32.0",
+    "date-fns": "^4.1.0"
   }
 }
