@@ -1,6 +1,6 @@
 {
   "name": "@konstant/stack",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "type": "module",
   "files": [
     "dist"
