@@ -1,12 +1,12 @@
 {
   "name": "@konstant/stack",
-  "version": "0.2.12",
+  "version": "0.2.13",
   "type": "module",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "pnpm ci:clean && pnpm tsup",
+    "build": "pnpm build:clean && pnpm tsup",
     "build:types": "tsc --outDir dist --rootDir ./src",
     "build:assets": "copyfiles -u 1 \"src/**/*.{html,css,scss,ttf,woff,woff2,eot,svg,jpg,png,json}\" dist/",
     "build:clean": "rimraf {dist,*.tsbuildinfo}",
